@@ -1,7 +1,45 @@
+// express
 const express = require('express');
 const app = express();
 const port = 3000;
 const router = express.Router();
+
+// to parse the csv files
+const csv = require('csv-parser');
+const fs = require('fs');
+const genres = []; 
+const albums = [];
+const artists = [];
+const tracks = [];
+
+// read genres csv file
+fs.createReadStream('lab3-data/genres.csv')
+    .pipe(csv({}))
+    .on('data', (data) => genres.push(data))
+    .on('end', () => {
+        console.log(genres);
+    });
+// read album csv file
+fs.createReadStream('lab3-data/raw_albums.csv')
+    .pipe(csv({}))
+    .on('data', (data) => albums.push(data))
+    .on('end', () => {
+        console.log(albums);
+    });
+// read artist csv file
+fs.createReadStream('lab3-data/raw_artists.csv')
+    .pipe(csv({}))
+    .on('data', (data) => artists.push(data))
+    .on('end', () => {
+        console.log(artists);
+    });
+// read track csv file
+fs.createReadStream('lab3-data/raw_tracks.csv')
+    .pipe(csv({}))
+    .on('data', (data) => tracks.push(data))
+    .on('end', () => {
+        console.log(tracks);
+    });
 
 const parts = [
     {id:100, name:'Belt', colour:'brown', stock:0},
