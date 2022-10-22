@@ -1,0 +1,34 @@
+/* colour palette and set base*/
+:root{
+    --neutral-clr: #e0bbff;
+    --dark-clr: #8769ac;
+    --light-clr: #e7d7fc;
+    --text-clr: rgb(255, 255, 255);
+    --dark-green: #678a6b;
+    --light-green:#bcd292;
+    --highlight-clr: #ff3700;
+    background-color: var(--neutral-clr);
+    color: var(--text-clr);
+}
+
+*,
+*::before,
+*::after{
+    font-family: inherit;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+}
+
+.search{
+    display: block;
+}
+
+.search-bar{
+    padding: 10px;
+    outline: none;
+    border: 1px solid var(--light-clr);
+    border-radius: 25px 25px 25px 25px;
+    margin-left: 20px;
+    box-sizing: border-box;
+    margin: 5px;
+}

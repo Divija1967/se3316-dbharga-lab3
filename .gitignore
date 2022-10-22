@@ -1,3 +1,7 @@
+/lab3-data
+*.png
+*.csv
+
 # Logs
 logs
 *.log
