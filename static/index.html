@@ -11,15 +11,26 @@
     <h1>Divija's Music Store</h1>
     <p>Welcome to my music store</p>
 
+    <!-- <div>
+        <ul id="navbar">
+            <li><a  href="index.html">Home</a></li>
+            <li><a  href="genres.html">Browse Genre</a></li>
+            <li><a href="artists.html">Artists</a></li>
+            <li><a href="tracks.html">Tracks</a></li>
+            <li><a href="albums.html">Albums</a></li>
+        </ul>
+    </div> -->
+
     <!-- for search bars -->
     <div class="search">
-        <input type="text" placeholder="Search by artist" id="by-artist" class="search-bar">
-        <input type="text" placeholder="Search by album" id="by-album" class="search-bar">
-        <input type="text" placeholder="Search by track" id="by-track" class="search-bar">
-        <input type="text" placeholder="Search by genre" id="by-genre" class="search-bar">
+        <input type="text" placeholder="Search by artist" id="by-artist" class="search-bar" maxlength="20">
+        <input type="text" placeholder="Search by album" id="by-album" class="search-bar" maxlength="20">
+        <input type="text" placeholder="Search by track" id="by-track" class="search-bar" maxlength="20">
+        <input type="text" placeholder="Search by genre" id="by-genre" class="search-bar" maxlength="20">
+        <button><a href="http://localhost:3000/api/genres">Browse All Genres</a></button>
     </div>
 
     <!-- javascript -->
-    <!-- <script src="index.js"></script> -->
+    <!-- <script src="script.js"></script> -->
 </body>
 </html>

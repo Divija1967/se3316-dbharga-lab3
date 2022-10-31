@@ -60,63 +60,69 @@ app.use((req, res, next) => {
 // parse data in body as JSOn
 router.use(express.json())
 
-// get list of parts
+// get list of genres
 router.get('/', (req, res) => {
-    res.send(parts);
+    res.send(genres);
 });
 
-// get details of a given part
-router.get('/:part_id', (req, res) =>{
+// get details of a given genre
+router.get('/:genre_id', (req, res) =>{
     // string 
-    const id = req.params.part_id;
-    // search parts array for if type and content of parameter matches array id
-    const part = parts.find(p => p.id === parseInt(id));
-    if(part){
-        res.send(part);
+    const id = req.params.genre_id;
+    // search genres array for if type and content of parameter matches array id
+    const genre = genres.find(g => g.id === parseInt(id));
+    if(genre){
+        res.send(genre);
     } else{
-        res.status(404).send(`Part ${id} was not found :(`)
+        res.status(404).send(`Genre ${id} was not found :(`)
     }
 });
 
-// to create/replace part data given a part id
+// to create/replace genre data given a genre id
 router.put('/:id', (req, res) =>{
-    const newPart = req.body;
-    console.log("Part: ", newPart);
+    const newGenre = req.body;
+    console.log("Genre: ", newGenre);
 
-    newPart.id = parseInt(req.params.id);
+    newGenre.id = parseInt(req.params.id);
 
     // replace the old part with a new part
-    const part = parts.findIndex(p => p.id === newPart.id);
-    // if part is not found
-    if(part < 0){
-        console.log('Creating new part');
-        parts.push(newPart);
+    const genre = genres.findIndex(g => g.id === newGenre.id);
+    // if genre is not found
+    if(genre < 0){
+        console.log('Creating new genre');
+        genres.push(newGenre);
     } else{
-        console.log("Modifying part ", req.params.id);
-        parts[part] = newPart;
+        console.log("Modifying genre ", req.params.id);
+        genres[genre] = newGenre;
     }
-    res.send(newPart);
+    res.send(newGenre);
 }) 
 
-// to update
-router.post('/:id', (req, res) =>{
-    const newPart = req.body;
-    console.log("Part: ", newPart);
+// // to change genre parent
+// router.post('/:id', (req, res) =>{
+//     const newGenre = req.body;
+//     console.log("Genre: ", newGenre);
 
-    // find part
-    const part = parts.findIndex(p => p.id === parseInt(req.params.id));
-    // if not found
-    if(part < 0){
-        res.status(404).send(`Part ${req.params.id} not found`)
-    } else{
-        console.log("Changing stock for ", req.params.id);
-        parts[part].stock += parseInt(req.body.stock);  // assuming stock exists
-        res.send(newPart);
-    }
-});
+//     // find genre
+//     const genre = genres.findIndex(g => g.id === parseInt(req.params.id));
+//     // if not found
+//     if(genre < 0){
+//         res.status(404).send(`Genre ${req.params.id} not found`)
+//     } else{
+//         console.log("Changing parent for ", req.params.id);
+//         parts[part].stock += parseInt(req.body.stock);  // assuming stock exists
+//         res.send(newPart);
+//     }
+// });
 
-// install the router at api/parts
-app.use('/api/parts', router);
+// install the router at api/genres
+app.use('/api/genres', router);
+// install the router at api/albums
+app.use('/api/albums', router);
+// install the router at api/tracks
+app.use('/api/tracks', router);
+// install the router at api/artists
+app.use('/api/artists', router);
 
 // start app
 app.listen(port, () => {
