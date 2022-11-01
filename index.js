@@ -99,7 +99,7 @@ routerGen.get('/:genre_id', (req, res) =>{
     }
 });
 
-// get details of a given genre
+// get details of a given artist
 routerArt.get('/:artist_id', (req, res) =>{
     // string     
     const art_id = req.params.artist_id;

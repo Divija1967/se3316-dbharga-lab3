@@ -22,9 +22,12 @@
             <button class="search-btn" id="track-btn">Search Tracks</button>
             <!-- <input type="text" placeholder="Search by genre" id="by-genre" class="search-bar" maxlength="20"> -->
             <button id="all-genres">Toggle Genres</button>
+            <button id="reset">Reset</button>
         </div>
     
     </div>
+
+<div id= "all-results">
     <!-- to display the genres -->
     <div class="hide" id="genre">
         <h1>Genres:</h1>
@@ -36,6 +39,14 @@
         <h1 id="h-art"></h1>
         <ol  id="artist-list"></ol>
     </div>
+
+     <!-- to display search results for tracks -->
+     <div id="track-info">
+        <h1 id="h-track"></h1>
+        <ol  id="track-list"></ol>
+    </div>
+
+</div>
 
     <!-- javascript -->
     <script defer src="app.js"></script>

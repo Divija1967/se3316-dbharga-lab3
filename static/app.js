@@ -1,17 +1,27 @@
 document.getElementById('all-genres').addEventListener('click', getGenres);
-document.getElementById('artist-btn').addEventListener('click', searchArtist);
+document.getElementById('artist-btn').addEventListener('click', artistDetails);
 document.getElementById('album-btn').addEventListener('click', getAlbums);
-document.getElementById('track-btn').addEventListener('click', getTracks);
+document.getElementById('track-btn').addEventListener('click', getTrackList);
+const n = 10;
 // use input from user
 
-// artists ID 
-// should be a number
-function searchArtist(){
+// current function:
+// artistDetails()
+// getArtistList()
+// trackDetails()
+// getTrackList()
+// getGenres()
+// clear()
+
+
+// get artist details by knowing artist id
+function artistDetails(){
     let artInput = document.getElementById("by-artist");       // get input from user
     const list = document.getElementById('artist-list');
     const header = document.getElementById('h-art');
     let results = [];            // so the comparison is not case-sensitive 
     clear(list);
+    clear(header);
     fetch('/api/artists')
     .then(res => res.json())
     .then(data => {
@@ -35,10 +45,102 @@ function searchArtist(){
     })        
 }
 
-// track
-function searchTrack(){
-
+// get list of artists by searching by name
+function getArtistList(){
+    let artInput = document.getElementById("by-artist");       // get input from user
+    const list = document.getElementById('artist-list');
+    const header = document.getElementById('h-art');
+    let results = [];            // so the comparison is not case-sensitive 
+    clear(list);
+    clear(header);
+    fetch('/api/artists')
+    .then(res => res.json())
+    .then(data => {
+        // compare input to fetched genres
+        for (i = 0; i < data.length; i++) {
+            // check if the input matches the inner text or text content
+          value = data[i].artist_name; 
+          // if the input matches an artist name exactly, move it to the top of the array
+          if (value.toLowerCase().indexOf(artInput.value.toLowerCase()) > -1) {
+            results[i] = data[i];    
+          } 
+        }       
+        header.append(document.createTextNode(`Artist results for: ${artInput.value}`))
+        results.forEach(e => {
+            const item = document.createElement('li')
+            item.appendChild(document.createTextNode(`${e.artist_id}`));
+            item.classList.add("box")
+            item.addEventListener("click", test(e.artist_id)); 
+            list.appendChild(item);
+        });
+    })        
 }
+
+// to get track details
+function trackDetails(){
+    let traInput = document.getElementById("by-track");       // get input from user
+    const list = document.getElementById('track-list');
+    const header = document.getElementById('h-track');
+    let results = [];            // so the comparison is not case-sensitive 
+    clear(list);
+    fetch('/api/tracks')
+    .then(res => res.json())
+    .then(data => {
+        // compare input to fetched genres
+        for (i = 0; i < data.length; i++) {
+            // check if the input matches the inner text or text content
+          value = data[i].track_id; 
+          // if the input matches an artist name exactly, move it to the top of the array
+          if (value.indexOf(traInput.value) > -1) {
+            results[i] = data[i];    
+          } 
+        }       
+        header.append(document.createTextNode(`Track results for: ${traInput.value}`))
+        results.forEach(e => {
+            console.log(e);
+            const item = document.createElement('li')
+            item.appendChild(document.createTextNode(`${e.track_id} ${e.album_id}  ${e.album_title} : ${e.artist_id} : ${e.artist_name} : ${e.tags} : ${e.track_date_created} : ${e.track_date_recorded} : ${e.track_duration} : ${e.track_genres} : ${e.track_number} : ${e.track_title}`));
+            item.classList.add("box")
+            list.appendChild(item);
+            
+        });
+    })        
+}
+
+
+// to get a list of tracks by searching by album title or by album name
+function getTrackList(){
+    let traInput = document.getElementById("by-track");       // get input from user
+    const list = document.getElementById('track-list');
+    const header = document.getElementById('h-track');
+    let results = [];            // so the comparison is not case-sensitive 
+    let counter = 0;
+    clear(list);
+    clear(header);
+    fetch('/api/tracks')
+    .then(res => res.json())
+    .then(data => {
+        // compare input to fetched genres
+        for (i = 0; i < data.length; i++) {
+            // check if the input matches the inner text or text content
+          value = data[i].track_title; 
+          value2 = data[i].album_title;
+          // if the input matches an artist name exactly, move it to the top of the array
+          if ((value.toLowerCase().indexOf(traInput.value.toLowerCase()) > -1 || value2.toLowerCase().indexOf(traInput.value.toLowerCase()) > -1) && counter < n) {
+            results[i] = data[i]; 
+            counter++;   
+          } 
+        }       
+        header.append(document.createTextNode(`Track results for: ${traInput.value}`))
+        results.forEach(e => {
+            const item = document.createElement('li')
+            item.appendChild(document.createTextNode(`${e.track_id}. ${e.track_title}`));
+            item.classList.add("box")
+            list.appendChild(item);
+        });
+    })        
+}
+
 // album
 function searchAlbum(){
 
