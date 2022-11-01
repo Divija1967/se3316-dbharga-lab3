@@ -1,9 +1,11 @@
 document.getElementById('get-genres').addEventListener('click', searchGenre);
+document.getElementById('all-genres').addEventListener('click', getGenres);
 // document.getElementById('get-artists').addEventListener('click', getArtists);
 // document.getElementById('get-tracks').addEventListener('click', getTracks);
 // document.getElementById('get-albums').addEventListener('click', getAlbums);
 // use input from user
-// genre
+// genres
+
 function searchGenre(){
     let gInput = document.getElementById("by-genre");       // get input from user
     let sameCase = gInput.value.toLowerCase();    
@@ -47,15 +49,19 @@ function searchAlbum(){
 
 }
 
-// to display all genres
+// to toggle the display of all genres
 function getGenres(){
+    const list = document.getElementById('genre');
+    list.classList.toggle('hide');
+    if(list.classList){
+        clear(list);
+    }
     fetch('/api/genres')
     .then(res => res.json())
     .then(data => {
-        const list = document.getElementById('genre');
         data.forEach(e => {
             const item = document.createElement('li')
-            item.appendChild(document.createTextNode(`${e.title}`));
+            item.appendChild(document.createTextNode(`Genre: ${e.title}Genre ID: ${e.genre_id}Genre parent ID: ${e.parent}`));
             list.appendChild(item);
         });
     })
@@ -99,3 +105,9 @@ function getAlbums(){
         });
     })
 }
+
+function clear(element){
+    while(element.firstChild){
+      element.removeChild(element.firstChild);
+    }
+  }

@@ -32,3 +32,8 @@
     box-sizing: border-box;
     margin: 5px;
 }
+
+/* to hide display when necessary */
+.hide{
+    display: none;
+}
