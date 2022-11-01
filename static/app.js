@@ -1,46 +1,17 @@
 document.getElementById('all-genres').addEventListener('click', getGenres);
-document.getElementById('artist-btn').addEventListener('click', getArtists);
+document.getElementById('artist-btn').addEventListener('click', searchArtist);
 document.getElementById('album-btn').addEventListener('click', getAlbums);
 document.getElementById('track-btn').addEventListener('click', getTracks);
-// document.getElementById('get-tracks').addEventListener('click', getTracks);
-// document.getElementById('get-albums').addEventListener('click', getAlbums);
 // use input from user
-// genres
-
-// function searchGenre(){
-//     let gInput = document.getElementById("by-genre");       // get input from user
-//     let sameCase = gInput.value.toLowerCase();    
-//     let results = [];            // so the comparison is not case-sensitive 
-
-//     fetch('/api/genres')
-//     .then(res => res.json())
-//     .then(data => {
-//         // compare input to fetched genres
-//         for (i = 0; i < data.length; i++) {
-//             // check if the input matches the inner text or text content
-//           value = data[i].title; 
-//           // if the input matches a genre name exactly, move it to the top of the array
-//           if (value.toLowerCase().indexOf(sameCase) > -1) {
-//             results[i] = data[i].title;    
-//           } 
-//       }
-//         console.log(results);        
-
-//         const list = document.getElementById('genre');
-//         data.forEach(e => {
-//             const item = document.createElement('li')
-//             item.appendChild(document.createTextNode(`genre: ${e}`));
-//             list.appendChild(item);
-//         });
-//     });        
-    
-// }
 
 // artists ID 
 // should be a number
 function searchArtist(){
     let artInput = document.getElementById("by-artist");       // get input from user
+    const list = document.getElementById('artist-list');
+    const header = document.getElementById('h-art');
     let results = [];            // so the comparison is not case-sensitive 
+    clear(list);
     fetch('/api/artists')
     .then(res => res.json())
     .then(data => {
@@ -50,16 +21,16 @@ function searchArtist(){
           value = data[i].artist_id; 
           // if the input matches an artist name exactly, move it to the top of the array
           if (value.indexOf(artInput.value) > -1) {
-            results[i] = data[i].artist_id;    
+            results[i] = data[i];    
           } 
-        }
-        console.log(results);        
-
-        const list = document.getElementById('artist-info');
+        }       
+        header.append(document.createTextNode(`Artist results for: ${artInput.value}`))
         results.forEach(e => {
             const item = document.createElement('li')
-            item.appendChild(document.createTextNode(`${e.artist_id} ${e.artist_images} name: ${e.artist_name} About: ${e.artist_bio} Members: ${e.artist_members} Website: ${e.artist_website} Date created: ${e.artist_date_created}`));
+            item.appendChild(document.createTextNode(`${e.artist_id}. ${e.artist_images} name: ${e.artist_name} About: ${e.artist_bio} Members: ${e.artist_members} Website: ${e.artist_website} Date created: ${e.artist_date_created}`));
+            item.classList.add("box")
             list.appendChild(item);
+            
         });
     })        
 }
@@ -93,24 +64,24 @@ function getGenres(){
     })
 }
 
-function getArtists(){
-    const list = document.getElementById('genre-list');
-    const genre_div = document.getElementById('genre')
-    genre_div.classList.toggle('hide');
-    if(genre_div.classList){
-        clear(list);
-    }
-    fetch('/api/artists')
-    .then(res => res.json())
-    .then(data => {
-        data.forEach(e => {
-            const item = document.createElement('li')
-            item.appendChild(document.createTextNode(`${e.artist_id}. Artists:: ${e.artist_name}`));
-            item.classList.add("box")
-            list.appendChild(item);
-        });
-    })
-}
+// function getArtists(){
+//     const list = document.getElementById('genre-list');
+//     const genre_div = document.getElementById('genre')
+//     genre_div.classList.toggle('hide');
+//     if(genre_div.classList){
+//         clear(list);
+//     }
+//     fetch('/api/artists')
+//     .then(res => res.json())
+//     .then(data => {
+//         data.forEach(e => {
+//             const item = document.createElement('li')
+//             item.appendChild(document.createTextNode(`${e.artist_id}. Artists:: ${e.artist_name}`));
+//             item.classList.add("box")
+//             list.appendChild(item);
+//         });
+//     })
+// }
 
 function getTracks(){
     const list = document.getElementById('genre-list');
