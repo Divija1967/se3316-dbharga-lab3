@@ -15,7 +15,6 @@ const n = 10;
 // getGenres()
 // clear()
 
-
 // get artist details by knowing artist id
 function artistDetails(){
     let artInput = document.getElementById("by-artist");       // get input from user
@@ -55,6 +54,10 @@ function getArtistList(){
     let results = [];            // so the comparison is not case-sensitive 
     clear(list);
     clear(header);
+    if((artInput.value === "")){
+        header.append(document.createTextNode(`Please enter a search value`))
+    }else
+
     fetch('/api/artists')
     .then(res => res.json())
     .then(data => {
@@ -74,18 +77,20 @@ function getArtistList(){
             item.classList.add("box")
             list.appendChild(item);
         });
-    })        
+    })   
 }
 
 // to get track details
 function trackDetails(){
     let traInput = document.getElementById("by-track-id");       // get input from user
-    console.log(traInput.value);
     const list = document.getElementById('track-list');
     const header = document.getElementById('h-track');
     let results = [];            // so the comparison is not case-sensitive 
     clear(list);
     clear(header);
+    if((traInput.value === "")){
+        header.append(document.createTextNode(`Please enter a search value`))
+    }else
     fetch('/api/tracks')
     .then(res => res.json())
     .then(data => {
@@ -98,11 +103,14 @@ function trackDetails(){
             results[i] = data[i];    
           } 
         }       
+        if(results.length == 0){
+            header.append(document.createTextNode(`No search results found for: ${traInput.value}`))
+        }else
         header.append(document.createTextNode(`Track result for id number ${traInput.value}`))
         results.forEach(e => {
             console.log(e);
             const item = document.createElement('li')
-            item.appendChild(document.createTextNode(`${e.track_id} ${e.album_id}  ${e.album_title} : ${e.artist_id} : ${e.artist_name} : ${e.tags} : ${e.track_date_created} : ${e.track_date_recorded} : ${e.track_duration} : ${e.track_genres} : ${e.track_number} : ${e.track_title}`));
+            item.appendChild(document.createTextNode(`${e.track_id}. ${e.album_id}  ${e.album_title} : ${e.artist_id} : ${e.artist_name} : ${e.tags} : ${e.track_date_created} : ${e.track_date_recorded} : ${e.track_duration} : ${e.track_genres} : ${e.track_number} : ${e.track_title}`));
             item.classList.add("box")
             list.appendChild(item);
             
