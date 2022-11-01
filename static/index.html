@@ -14,13 +14,59 @@
 
         <!-- for search bars -->
         <div class="search">
-            <input type="number" placeholder="Search by artist" id="by-artist" class="search-bar" min="0" max="20000">
-            <button class="search-btn" id="artist-btn">Search Artists by ID</button>
-            <input type="text" placeholder="Search by album" id="by-album" class="search-bar" maxlength="20">
-            <button class="search-btn" id="album-btn">Search Albums</button>
-            <input type="text" placeholder="Search by track" id="by-track" class="search-bar" maxlength="20">
-            <button class="search-btn" id="track-btn">Search Tracks</button>
-            <!-- <input type="text" placeholder="Search by genre" id="by-genre" class="search-bar" maxlength="20"> -->
+            <!-- to search for artist by id -->
+            <input 
+                type="number" 
+                placeholder="Enter artist id" 
+                id="by-artist" 
+                class="search-bar" 
+                min="0" 
+                max="20000">
+            <button 
+                class="search-btn" 
+                id="artist-btn">
+                Search Artists by ID
+            </button>
+            <!-- to search for list of artists by artist name -->
+            <input 
+                type="text" 
+                placeholder="Search by artist name" 
+                id="by-art-name" 
+                class="search-bar"
+                maxlength="20">
+            <button 
+                class="search-btn" 
+                id="artist-name-btn">
+                Search Artists by name
+            </button>
+            <!-- <input type="text" placeholder="Search by album" id="by-album" class="search-bar" maxlength="20">
+            <button class="search-btn" id="album-btn">Search Albums</button> -->
+            <!-- to search for track by album or track name -->
+            <input 
+                type="text" 
+                placeholder="Search by track" 
+                id="by-track" 
+                class="search-bar" 
+                maxlength="20">
+            <button 
+                class="search-btn" 
+                id="track-btn">
+                Search Tracks
+            </button>
+            <!-- to search for track list by track id -->
+            <input 
+                type="number" 
+                placeholder="Enter track id" 
+                id="by-track-id" 
+                class="search-bar" 
+                min="0"
+                max="200000">
+            <button 
+                class="search-btn" 
+                id="track-id-btn">
+                Search Tracks
+            </button>
+
             <button id="all-genres">Toggle Genres</button>
             <button id="reset">Reset</button>
         </div>

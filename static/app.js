@@ -1,7 +1,9 @@
 document.getElementById('all-genres').addEventListener('click', getGenres);
 document.getElementById('artist-btn').addEventListener('click', artistDetails);
-document.getElementById('album-btn').addEventListener('click', getAlbums);
+document.getElementById('artist-name-btn').addEventListener('click', getArtistList);
+// document.getElementById('album-btn').addEventListener('click', getAlbums);
 document.getElementById('track-btn').addEventListener('click', getTrackList);
+document.getElementById('track-id-btn').addEventListener('click', trackDetails);
 const n = 10;
 // use input from user
 
@@ -30,14 +32,14 @@ function artistDetails(){
             // check if the input matches the inner text or text content
           value = data[i].artist_id; 
           // if the input matches an artist name exactly, move it to the top of the array
-          if (value.indexOf(artInput.value) > -1) {
+          if (value === artInput.value) {
             results[i] = data[i];    
           } 
         }       
         header.append(document.createTextNode(`Artist results for: ${artInput.value}`))
         results.forEach(e => {
             const item = document.createElement('li')
-            item.appendChild(document.createTextNode(`${e.artist_id}. ${e.artist_images} name: ${e.artist_name} About: ${e.artist_bio} Members: ${e.artist_members} Website: ${e.artist_website} Date created: ${e.artist_date_created}`));
+            item.appendChild(document.createTextNode(`${e.artist_id}. ${e.artist_name} - ${e.artist_images} name: ${e.artist_name} About: ${e.artist_bio} Members: ${e.artist_members} Website: ${e.artist_website} Date created: ${e.artist_date_created}`));
             item.classList.add("box")
             list.appendChild(item);
             
@@ -47,7 +49,7 @@ function artistDetails(){
 
 // get list of artists by searching by name
 function getArtistList(){
-    let artInput = document.getElementById("by-artist");       // get input from user
+    let artInput = document.getElementById("by-art-name");       // get input from user
     const list = document.getElementById('artist-list');
     const header = document.getElementById('h-art');
     let results = [];            // so the comparison is not case-sensitive 
@@ -68,9 +70,8 @@ function getArtistList(){
         header.append(document.createTextNode(`Artist results for: ${artInput.value}`))
         results.forEach(e => {
             const item = document.createElement('li')
-            item.appendChild(document.createTextNode(`${e.artist_id}`));
+            item.appendChild(document.createTextNode(`${e.artist_id}. ${e.artist_name}`));
             item.classList.add("box")
-            item.addEventListener("click", test(e.artist_id)); 
             list.appendChild(item);
         });
     })        
@@ -78,11 +79,13 @@ function getArtistList(){
 
 // to get track details
 function trackDetails(){
-    let traInput = document.getElementById("by-track");       // get input from user
+    let traInput = document.getElementById("by-track-id");       // get input from user
+    console.log(traInput.value);
     const list = document.getElementById('track-list');
     const header = document.getElementById('h-track');
     let results = [];            // so the comparison is not case-sensitive 
     clear(list);
+    clear(header);
     fetch('/api/tracks')
     .then(res => res.json())
     .then(data => {
@@ -91,11 +94,11 @@ function trackDetails(){
             // check if the input matches the inner text or text content
           value = data[i].track_id; 
           // if the input matches an artist name exactly, move it to the top of the array
-          if (value.indexOf(traInput.value) > -1) {
+          if (value === traInput.value) {
             results[i] = data[i];    
           } 
         }       
-        header.append(document.createTextNode(`Track results for: ${traInput.value}`))
+        header.append(document.createTextNode(`Track result for id number ${traInput.value}`))
         results.forEach(e => {
             console.log(e);
             const item = document.createElement('li')
