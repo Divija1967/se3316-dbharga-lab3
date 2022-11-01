@@ -8,21 +8,32 @@
     <link rel="stylesheet" href="stylesheet.css">
 </head>
 <body>
-    <h1>Divija's Music Store</h1>
-    <p>Welcome to my music store</p>
+    <div class="top">
+        <h1>Divija's Music Store</h1>
+        <p>Welcome to my music site</p>
 
-    <!-- for search bars -->
-    <div class="search">
-        <input type="text" placeholder="Search by artist" id="by-artist" class="search-bar" maxlength="20">
-        <input type="text" placeholder="Search by album" id="by-album" class="search-bar" maxlength="20">
-        <input type="text" placeholder="Search by track" id="by-track" class="search-bar" maxlength="20">
-        <input type="text" placeholder="Search by genre" id="by-genre" class="search-bar" maxlength="20">
-        <button id="all-genres">Toggle genres list</button>
+        <!-- for search bars -->
+        <div class="search">
+            <input type="number" placeholder="Search by artist" id="by-artist" class="search-bar" min="0" max="20000">
+            <button class="search-btn" id="artist-btn">Search Artists by ID</button>
+            <input type="text" placeholder="Search by album" id="by-album" class="search-bar" maxlength="20">
+            <button class="search-btn" id="artist-btn">Search Albums</button>
+            <input type="text" placeholder="Search by track" id="by-track" class="search-bar" maxlength="20">
+            <button class="search-btn" id="artist-btn">Search Tracks</button>
+            <!-- <input type="text" placeholder="Search by genre" id="by-genre" class="search-bar" maxlength="20"> -->
+            <button id="all-genres">Toggle Genres</button>
+        </div>
+    
+    </div>
+    <!-- to display the genres -->
+    <div class="hide" id="genre">
+        <h1>Genres:</h1>
+        <ol  id="genre-list"></ol>
     </div>
 
-    <div id="genre-list">
-        <h1>Genres<button id="get-genres">Reload</button></h1>
-        <ol class="hide" id="genre"></ol>
+    <!-- to display search results for artists -->
+    <div id="artist-info">
+
     </div>
 
     <!-- javascript -->

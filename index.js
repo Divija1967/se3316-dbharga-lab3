@@ -30,10 +30,10 @@ fs.createReadStream('lab3-data/raw_albums.csv')
 // read artist csv file
 fs.createReadStream('lab3-data/raw_artists.csv')
     .pipe(csv({}))
-    .on('data', (data) => artists.push(data));
-    // .on('end', () => {
-    //     console.log(artists);
-    // });
+    .on('data', (data) => artists.push(data))
+    .on('end', () => {
+        console.log(artists);
+    });
 // read track csv file
 fs.createReadStream('lab3-data/raw_tracks.csv')
     .pipe(csv({}))
@@ -56,10 +56,12 @@ app.use((req, res, next) => {
 router.use(express.json())
 
 
-// get list of genres
-router.get('/', (req, res) => {
+// get list of genres 
+router.get('/', (req, res, next) => {
     res.send(genres);
+    next();
 });
+
 
 // get details of a given genre
 router.get('/:genre_id', (req, res) =>{
@@ -74,25 +76,38 @@ router.get('/:genre_id', (req, res) =>{
     }
 });
 
-// to create/replace genre data given a genre id
-router.put('/:genre_id', (req, res) =>{
-    const newGenre = req.body;
-    console.log("Genre: ", newGenre);
-
-    newGenre.genre_id = parseInt(req.params.genre_id);
-
-    // replace the old part with a new part
-    const genre = genres.findIndex(g => g.genre_id === newGenre.id);
-    // if genre is not found
-    if(genre < 0){
-        console.log('Creating new genre');
-        genres.push(newGenre);
+// get details of a given genre
+router.get('/:artist_id', (req, res) =>{
+    // string     
+    const art_id = req.params.artist_id;
+    // search genres array to see if type and content of parameter matches array id
+    const artist = artists.find(g => g.artist_id === art_id);
+    if(artist){
+        res.send(artists);
     } else{
-        console.log("Modifying genre ", req.params.genre_id);
-        genres[genre] = newGenre;
+        res.status(404).send(`Genre ${art_id} was not found :(`)
     }
-    res.send(newGenre);
-}) 
+});
+
+// // to create/replace genre data given a genre id
+// router.put('/:genre_id', (req, res) =>{
+//     const newGenre = req.body;
+//     console.log("Genre: ", newGenre);
+
+//     newGenre.genre_id = parseInt(req.params.genre_id);
+
+//     // replace the old part with a new part
+//     const genre = genres.findIndex(g => g.genre_id === newGenre.id);
+//     // if genre is not found
+//     if(genre < 0){
+//         console.log('Creating new genre');
+//         genres.push(newGenre);
+//     } else{
+//         console.log("Modifying genre ", req.params.genre_id);
+//         genres[genre] = newGenre;
+//     }
+//     res.send(newGenre);
+// }) 
 
 // // to change parts stock
 // router.post('/:id', (req, res) =>{

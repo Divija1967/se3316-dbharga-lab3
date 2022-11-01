@@ -1,13 +1,14 @@
 /* colour palette and set base*/
 :root{
-    --neutral-clr: #e0bbff;
-    --dark-clr: #8769ac;
-    --light-clr: #e7d7fc;
-    --text-clr: rgb(255, 255, 255);
-    --dark-green: #678a6b;
-    --light-green:#bcd292;
-    --highlight-clr: #ff3700;
-    background-color: var(--neutral-clr);
+    --neutral-clr: #1f2833;
+    --dark-clr: #1a1b21;
+    --light-clr: #c5c6c7;
+    --text-clr: rgb(239, 239, 239);
+    --highlight-clr: #14fff7;
+    --darkhighlight-clr: #009ea9;
+    --highlight-clr-2: #ff2b14;
+    --darkhighlight-clr-2: #a91900;
+    background-color: var(--dark-clr);
     color: var(--text-clr);
 }
 
@@ -19,15 +20,11 @@
     font-family: 'Roboto', sans-serif;
 }
 
-.search{
-    display: block;
-}
-
 .search-bar{
     padding: 10px;
     outline: none;
     border: 1px solid var(--light-clr);
-    border-radius: 25px 25px 25px 25px;
+    border-radius: 15px 15px 15px 15px;
     margin-left: 20px;
     box-sizing: border-box;
     margin: 5px;
@@ -37,3 +34,68 @@
 .hide{
     display: none;
 }
+
+#genre{
+    border: 5px solid var(--darkhighlight-clr-2);
+    max-width: 500px;
+    margin: 0 auto 10px;
+    padding: 20px;
+    position: center;
+    border-radius: 25px 25px 25px 25px;
+}
+
+#genre > h1{
+    color: var(--text-clr);
+    text-align: left;
+}
+
+#genre-list{
+    list-style: none;
+}
+
+.box{
+    margin-top: 10px;
+    padding: 10px;
+    text-align: left;
+    color: #41166c;
+    background-color: var(--text-clr);
+    border-radius: 10px 10px 10px 10px;
+    border: var(--highlight-clr);
+}
+
+.top{
+    background-color: var(--dark-clr);
+    position: sticky;
+    top: 0;
+    width: 100%;
+    padding: 10px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 25px 20px -20px; 
+    z-index: 1;
+}
+
+.top p{
+    color: var(--highlight-clr-2);
+}
+
+button{
+    padding: 10px;
+    background-color: transparent;
+    color: var(--text-clr);
+    border: 3px solid var(--highlight-clr-2);
+    font-weight: bold;
+    border-radius: 5px 5px 5px 5px;
+}
+
+button:hover{
+    cursor: pointer;
+    border: 3px solid var(--darkhighlight-clr-2);
+}
+
+.search-btn{
+    border: 3px solid var(--highlight-clr);
+}
+
+.search-btn:hover{
+    border: 3px solid var(--darkhighlight-clr);
+}
+
