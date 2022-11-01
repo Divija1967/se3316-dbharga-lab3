@@ -2,7 +2,10 @@
 const express = require('express');
 const app = express();
 const port = 3000;
-const router = express.Router();
+const routerGen = express.Router();
+const routerArt = express.Router();
+const routerAlb = express.Router();
+const routerTra = express.Router();
 
 // to parse the csv files
 const csv = require('csv-parser');
@@ -31,9 +34,9 @@ fs.createReadStream('lab3-data/raw_albums.csv')
 fs.createReadStream('lab3-data/raw_artists.csv')
     .pipe(csv({}))
     .on('data', (data) => artists.push(data))
-    .on('end', () => {
-        console.log(artists);
-    });
+    // .on('end', () => {
+    //     console.log(artists);
+    // });
 // read track csv file
 fs.createReadStream('lab3-data/raw_tracks.csv')
     .pipe(csv({}))
@@ -53,18 +56,38 @@ app.use((req, res, next) => {
 })
 
 // parse data in body as json
-router.use(express.json())
+routerGen.use(express.json())
+routerArt.use(express.json())
+routerAlb.use(express.json());
+routerTra.use(express.json());
 
 
 // get list of genres 
-router.get('/', (req, res, next) => {
+routerGen.get('/', (req, res, next) => {
     res.send(genres);
     next();
 });
 
+// get list of artists 
+routerArt.get('/', (req, res, next) => {
+    res.send(artists);
+    next();
+});
+
+// get list of albums 
+routerAlb.get('/', (req, res, next) => {
+    res.send(albums);
+    next();
+});
+
+// get list of tracks 
+routerTra.get('/', (req, res, next) => {
+    res.send(tracks);
+    next();
+});
 
 // get details of a given genre
-router.get('/:genre_id', (req, res) =>{
+routerGen.get('/:genre_id', (req, res) =>{
     // string     
     const id = req.params.genre_id;
     // search genres array to see if type and content of parameter matches array id
@@ -77,7 +100,7 @@ router.get('/:genre_id', (req, res) =>{
 });
 
 // get details of a given genre
-router.get('/:artist_id', (req, res) =>{
+routerArt.get('/:artist_id', (req, res) =>{
     // string     
     const art_id = req.params.artist_id;
     // search genres array to see if type and content of parameter matches array id
@@ -88,6 +111,33 @@ router.get('/:artist_id', (req, res) =>{
         res.status(404).send(`Genre ${art_id} was not found :(`)
     }
 });
+
+// get details of a given genre
+routerArt.get('/:album_id', (req, res) =>{
+    // string     
+    const alb_id = req.params.album_id;
+    // search genres array to see if type and content of parameter matches array id
+    const album = albums.find(g => g.album_id === alb_id);
+    if(album){
+        res.send(albums);
+    } else{
+        res.status(404).send(`Genre ${alb_id} was not found :(`)
+    }
+});
+
+// get details of a given track
+routerTra.get('/:track_id', (req, res) =>{
+    // string     
+    const tra_id = req.params.track_id;
+    // search genres array to see if type and content of parameter matches array id
+    const track = albums.find(g => g.track_id === tra_id);
+    if(track){
+        res.send(tracks);
+    } else{
+        res.status(404).send(`Genre ${tra_id} was not found :(`)
+    }
+});
+
 
 // // to create/replace genre data given a genre id
 // router.put('/:genre_id', (req, res) =>{
@@ -127,13 +177,13 @@ router.get('/:artist_id', (req, res) =>{
 // });
 
 // install the router at api/genres
-app.use('/api/genres', router);
+app.use('/api/genres', routerGen);
 // install the router at api/albums
-app.use('/api/albums', router);
+app.use('/api/albums', routerAlb);
 // install the router at api/tracks
-app.use('/api/tracks', router);
+app.use('/api/tracks', routerTra);
 // install the router at api/artists
-app.use('/api/artists', router);
+app.use('/api/artists', routerArt);
 
 // start app
 app.listen(port, () => {

@@ -1,5 +1,7 @@
 document.getElementById('all-genres').addEventListener('click', getGenres);
-document.getElementById('artist-btn').addEventListener('click', searchArtist);
+document.getElementById('artist-btn').addEventListener('click', getArtists);
+document.getElementById('album-btn').addEventListener('click', getAlbums);
+document.getElementById('track-btn').addEventListener('click', getTracks);
 // document.getElementById('get-tracks').addEventListener('click', getTracks);
 // document.getElementById('get-albums').addEventListener('click', getAlbums);
 // use input from user
@@ -92,22 +94,60 @@ function getGenres(){
 }
 
 function getArtists(){
+    const list = document.getElementById('genre-list');
+    const genre_div = document.getElementById('genre')
+    genre_div.classList.toggle('hide');
+    if(genre_div.classList){
+        clear(list);
+    }
     fetch('/api/artists')
     .then(res => res.json())
     .then(data => {
-        const list = document.getElementById('genre');
         data.forEach(e => {
             const item = document.createElement('li')
-            item.appendChild(document.createTextNode(`genre id: ${e.genre_id}`));
+            item.appendChild(document.createTextNode(`${e.artist_id}. Artists:: ${e.artist_name}`));
+            item.classList.add("box")
             list.appendChild(item);
         });
     })
 }
 
 function getTracks(){
+    const list = document.getElementById('genre-list');
+    const genre_div = document.getElementById('genre')
+    genre_div.classList.toggle('hide');
+    if(genre_div.classList){
+        clear(list);
+    }
+    fetch('/api/tracks')
+    .then(res => res.json())
+    .then(data => {
+        data.forEach(e => {
+            const item = document.createElement('li')
+            item.appendChild(document.createTextNode(`${e.track_id}. Track: ${e.track_title}`));
+            item.classList.add("box")
+            list.appendChild(item);
+        });
+    })
 }
 
 function getAlbums(){
+    const list = document.getElementById('genre-list');
+    const genre_div = document.getElementById('genre')
+    genre_div.classList.toggle('hide');
+    if(genre_div.classList){
+        clear(list);
+    }
+    fetch('/api/albums')
+    .then(res => res.json())
+    .then(data => {
+        data.forEach(e => {
+            const item = document.createElement('li')
+            item.appendChild(document.createTextNode(`${e.album_id}. Album: ${e.album_date_created}`));
+            item.classList.add("box")
+            list.appendChild(item);
+        });
+    })
 }
 
 function clear(element){
