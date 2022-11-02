@@ -5,7 +5,13 @@ document.getElementById('artist-name-btn').addEventListener('click', getArtistLi
 document.getElementById('track-btn').addEventListener('click', getTrackList);
 document.getElementById('track-id-btn').addEventListener('click', trackDetails);
 document.getElementById('reset-btn').addEventListener('click', reset);
-const n = 10;
+
+const n = 20;
+
+const listsContainer = document.querySelector('[data-lists]')
+const newListForm = document.querySelector('[data-new-list-form]')
+const newListInput = document.querySelector('[data-new-list-input]')
+
 // use input from user
 
 // current function:
@@ -15,6 +21,14 @@ const n = 10;
 // getTrackList()
 // getGenres()
 // clear()
+// reset
+// search for albums??
+
+// sort by artist name: results.sort(dynamicSort("artist_name")
+// sort by track name: results.sort(dynamicSort("track_title")
+// sort by album name: results.sort(dynamicSort("album_title")
+// sort by length name: results.sort(dynamicSort("track_duration")
+
 
 // get artist details by knowing artist id
 function artistDetails(){
@@ -121,7 +135,7 @@ function trackDetails(){
         if(results.length == 0){
             header.append(document.createTextNode(`No search results found for: ${traInput.value}`))
         }else
-        header.append(document.createTextNode(`Track result for id number ${traInput.value}`))
+        header.append(document.createTextNode(`Track result for id number ${traInput.value}`));
         results.forEach(e => {
             var track_g = e.track_genres;
             console.log(track_g);
@@ -184,19 +198,14 @@ function getTrackList(){
             counter++;   
           } 
         }       
-        header.append(document.createTextNode(`Track results for: ${traInput.value}`))
+        header.append(document.createTextNode(`Top ${n} track results for:  ${traInput.value}`))
         results.forEach(e => {
             const item = document.createElement('li')
-            item.appendChild(document.createTextNode(`${e.track_id}. ${e.track_title}`));
+            item.appendChild(document.createTextNode(`${e.track_id}. ${e.track_title} (${e.album_title})`));
             item.classList.add("box")
             list.appendChild(item);
         });
     })        
-}
-
-// album
-function searchAlbum(){
-
 }
 
 // to toggle the display of all genres
@@ -219,31 +228,14 @@ function getGenres(){
     })
 }
 
-function getAlbums(){
-    const list = document.getElementById('genre-list');
-    const genre_div = document.getElementById('genre')
-    genre_div.classList.toggle('hide');
-    if(genre_div.classList){
-        clear(list);
-    }
-    fetch('/api/albums')
-    .then(res => res.json())
-    .then(data => {
-        data.forEach(e => {
-            const item = document.createElement('li')
-            item.appendChild(document.createTextNode(`${e.album_id}. Album: ${e.album_date_created}`));
-            item.classList.add("box")
-            list.appendChild(item);
-        });
-    })
-}
-
+// to clear a search list
 function clear(element){
     while(element.firstChild){
       element.removeChild(element.firstChild);
     }
 }
 
+// to clear all search results
 function reset(){
     // from artist search
     const artList = document.getElementById('artist-list');
@@ -258,7 +250,16 @@ function reset(){
 
     clear(artList);
     clear(artHeader);
-
-
-
 }
+
+// to sort the data based on a selected property
+function dynamicSort(property) {
+    return function (a,b) {
+     var result = (a[property].toLowerCase() < b[property].toLowerCase()) ? -1 : (a[property].toLowerCase() > b[property].toLowerCase()) ? 1 : 0;
+     return result;
+ }
+}
+
+
+
+

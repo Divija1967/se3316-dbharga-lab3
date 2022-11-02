@@ -9,14 +9,22 @@
 </head>
 <body>
     <div class="top">
-        <h1>Divija's Music Store</h1>
+        <h1>Divija's Music Store 
+            <div class="sort-btns">
+                <button class="sort-btns" id="sort-artist-btn">by artist</button>
+                <button class="sort-btns" id="sort-track-btn">by track</button>
+                <button class="sort-btns" id="sort-album-btn">by album</button>
+                <button class="sort-btns" id="sort-length-btn">by length</button>
+            </div>
+        </h1>
+        <!-- buttons for sort selection -->
 
         <!-- for search bars -->
         <div class="search">
             <!-- to search for artist by id -->
             <input 
                 type="number" 
-                placeholder="Enter artist id" 
+                placeholder="Artist id" 
                 id="by-artist" 
                 class="search-bar" 
                 min="0" 
@@ -43,7 +51,7 @@
             <!-- to search for track by album or track name -->
             <input 
                 type="text" 
-                placeholder="Search by track" 
+                placeholder="Search by track or album" 
                 id="by-track" 
                 class="search-bar" 
                 maxlength="20">
@@ -55,7 +63,7 @@
             <!-- to search for track list by track id -->
             <input 
                 type="number" 
-                placeholder="Enter track id" 
+                placeholder="Track id" 
                 id="by-track-id" 
                 class="search-bar" 
                 min="0"
@@ -72,6 +80,23 @@
     
     </div>
 
+    <div class="playlists">
+        <h2 class="playListTitle">My Playlists</h2>
+        <ul class="playList" data-lists></ul>
+
+        <form action="" data-new-list-form>
+            <input 
+                type="text"
+                class="new list"
+                data-new-list-input
+                placeholder="new list name"
+                aria-label="new list name"
+            />
+            <button class="btn create"
+                aria-label="create new list">+</button>
+        </form>
+    </div>
+
 <div id= "all-results">
     <!-- to display the genres -->
     <div class="hide" id="genre">
@@ -82,7 +107,7 @@
     <!-- to display search results for artists -->
     <div id="artist-info">
         <h1 id="h-art"></h1>
-        <ol  id="artist-list"></ol>
+        <ul  id="artist-list"></ul>
     </div>
 
      <!-- to display search results for tracks -->
