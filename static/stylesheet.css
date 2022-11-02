@@ -4,10 +4,17 @@
     --dark-clr: #1a1b21;
     --light-clr: #c5c6c7;
     --text-clr: rgb(239, 239, 239);
-    --highlight-clr: #14fff7;
+
+    --highlight-clr: rgb(225, 107, 255);
+    --darkhighlight-clr: rgb(153, 30, 184);
+    --highlight-clr-2: rgb(106, 255, 165);
+    --darkhighlight-clr-2: rgb(27, 151, 76);
+    --highlight-clr-3: rgb(96, 186, 255);
+    --darkhighlight-clr-3: rgb(26, 96, 150);
+    /* --highlight-clr: #14fff7;
     --darkhighlight-clr: #009ea9;
     --highlight-clr-2: #ff6d5d;
-    --darkhighlight-clr-2: #a91900;
+    --darkhighlight-clr-2: #a91900; */
     background-color: var(--dark-clr);
     color: var(--text-clr);
 }
@@ -15,9 +22,12 @@
 *,
 *::before,
 *::after{
-    font-family: inherit;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     text-align: center;
-    font-family: 'Roboto', sans-serif;
+}
+
+h1{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 .search-bar{
@@ -57,14 +67,25 @@ ol{
     color: white;
 }
 
+li{
+    display: inline-block;
+    vertical-align: top;
+}
+
 .box{
     margin-top: 10px;
     padding: 10px;
-    text-align: left;
+    text-align: center;
     color: #41166c;
     background-color: var(--text-clr);
     border-radius: 10px 10px 10px 10px;
     border: var(--highlight-clr);
+    white-space: pre;
+    max-width: fit-content;
+    align-content: center;
+    margin: 20px 20px 0 0;
+    vertical-align: top;
+    display: inline-block;
 }
 
 .top{
@@ -93,6 +114,31 @@ button{
 button:hover{
     cursor: pointer;
     border: 3px solid var(--darkhighlight-clr-2);
+}
+
+#track-btn, #track-id-btn{
+    padding: 10px;
+    background-color: transparent;
+    color: var(--text-clr);
+    border: 3px solid var(--highlight-clr-3);
+    font-weight: bold;
+    border-radius: 5px 5px 5px 5px;
+}
+
+#track-btn:hover, #track-id-btn:hover{
+    cursor: pointer;
+    border: 3px solid var(--darkhighlight-clr-3);
+}
+
+#reset-btn{
+    background-color: var(--highlight-clr-2);
+    color: var(--dark-clr);
+    text-size-adjust: larger;
+}
+
+#reset-btn:hover{
+    background-color: var(--darkhighlight-clr-2);
+    color: var(--text-clr);
 }
 
 .search-btn{
