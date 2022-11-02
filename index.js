@@ -106,7 +106,7 @@ routerArt.get('/:artist_id', (req, res) =>{
     // search genres array to see if type and content of parameter matches array id
     const artist = artists.find(g => g.artist_id === art_id);
     if(artist){
-        res.send(artists);
+        res.send(artist);
     } else{
         res.status(404).send(`Genre ${art_id} was not found :(`)
     }
@@ -119,7 +119,7 @@ routerArt.get('/:album_id', (req, res) =>{
     // search genres array to see if type and content of parameter matches array id
     const album = albums.find(g => g.album_id === alb_id);
     if(album){
-        res.send(albums);
+        res.send(album);
     } else{
         res.status(404).send(`Genre ${alb_id} was not found :(`)
     }
@@ -130,11 +130,11 @@ routerTra.get('/:track_id', (req, res) =>{
     // string     
     const tra_id = req.params.track_id;
     // search genres array to see if type and content of parameter matches array id
-    const track = albums.find(g => g.track_id === tra_id);
+    const track = tracks.find(g => g.track_id === tra_id);
     if(track){
-        res.send(tracks);
+        res.send(track);
     } else{
-        res.status(404).send(`Genre ${tra_id} was not found :(`)
+        res.status(404).send(`Track ${tra_id} was not found :(`)
     }
 });
 
