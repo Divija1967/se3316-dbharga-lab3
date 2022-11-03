@@ -1,34 +1,33 @@
 document.getElementById('all-genres').addEventListener('click', getGenres);
 document.getElementById('artist-btn').addEventListener('click', artistDetails);
-document.getElementById('artist-name-btn').addEventListener('click', getArtistList);
+document.getElementById('artist-name-btn').addEventListener('click', function(){
+    getArtistList("artist_id");
+});
 // document.getElementById('album-btn').addEventListener('click', getAlbums);
-document.getElementById('track-btn').addEventListener('click', getTrackList);
+document.getElementById('track-btn').addEventListener('click', function(){
+    getTrackList("track_id");
+});
 document.getElementById('track-id-btn').addEventListener('click', trackDetails);
 document.getElementById('reset-btn').addEventListener('click', reset);
+
+document.getElementById("sort-artist-btn").addEventListener('click', function(){
+    getArtistList("artist_name");
+});
+document.getElementById("sort-album-btn").addEventListener('click', function(){
+    getTrackList("album_title");
+});
+document.getElementById("sort-track-btn").addEventListener('click', function(){
+    getTrackList("track_title");
+});
+document.getElementById("sort-length-btn").addEventListener('click', function(){
+    getTrackList("track_duration");
+});
 
 const n = 20;
 
 const listsContainer = document.querySelector('[data-lists]')
 const newListForm = document.querySelector('[data-new-list-form]')
 const newListInput = document.querySelector('[data-new-list-input]')
-
-// use input from user
-
-// current function:
-// artistDetails()
-// getArtistList()
-// trackDetails()
-// getTrackList()
-// getGenres()
-// clear()
-// reset
-// search for albums??
-
-// sort by artist name: results.sort(dynamicSort("artist_name")
-// sort by track name: results.sort(dynamicSort("track_title")
-// sort by album name: results.sort(dynamicSort("album_title")
-// sort by length name: results.sort(dynamicSort("track_duration")
-
 
 // get artist details by knowing artist id
 function artistDetails(){
@@ -58,12 +57,12 @@ function artistDetails(){
             list.appendChild(item);
     })  
     .catch(function(err){
-        header.append(document.createTextNode(`Try again`))
+        header.append(document.createTextNode(`No results found. Please try again`))
     });       
 }
 
 // get list of artists by searching by name
-function getArtistList(){
+function getArtistList(sortProperty){
     let artInput = document.getElementById("by-art-name");       // get input from user
     const list = document.getElementById('artist-list');
     const header = document.getElementById('h-art');
@@ -77,7 +76,7 @@ function getArtistList(){
     fetch('/api/artists')
     .then(res => res.json())
     .then(data => {
-        // compare input to fetched genres
+        // compare input to fetched artists
         for (i = 0; i < data.length; i++) {
             // check if the input matches the inner text or text content
           value = data[i].artist_name; 
@@ -87,6 +86,7 @@ function getArtistList(){
           } 
         }       
         header.append(document.createTextNode(`Artist results for: ${artInput.value}`))
+        results.sort(dynamicSort(sortProperty));
         results.forEach(e => {
             const item = document.createElement('li')
             item.appendChild(document.createTextNode(`${e.artist_id}. ${e.artist_name}`));
@@ -137,77 +137,13 @@ function trackDetails(){
             list.appendChild(item);
     })        
     .catch(function(err){
-        header.append(document.createTextNode(`Try again`))
-    });  
+        header.append(document.createTextNode(`No results found. Please try again`))
+    });         
 }
-
-// // to get track details
-// function trackDetails(){
-//     let traInput = document.getElementById("by-track-id");       // get input from user
-//     const list = document.getElementById('track-list');
-//     const header = document.getElementById('h-track');
-//     let results = [];            // so the comparison is not case-sensitive 
-//     clear(list);
-//     clear(header);
-//     if((traInput.value === "")){
-//         header.append(document.createTextNode(`Please enter a search value`))
-//     }else
-//     fetch('/api/tracks')
-//     .then(res => res.json())
-//     .then(data => {
-//         // compare input to fetched genres
-//         for (i = 0; i < data.length; i++) {
-//             // check if the input matches the inner text or text content
-//           value = data[i].track_id; 
-//           // if the input matches an artist name exactly, move it to the top of the array
-//           if (value === traInput.value) {
-//             results[i] = data[i];    
-//             break;
-//           } 
-//         }       
-//         if(results.length == 0){
-//             header.append(document.createTextNode(`No search results found for: ${traInput.value}`))
-//         }else
-//         header.append(document.createTextNode(`Track result for id number ${traInput.value}`));
-//         results.sort(sortListDir());
-//         results.forEach(e => {
-//             var track_g = e.track_genres;
-//             console.log(track_g);
-//             var quoted = track_g.replace(/'/g, '"');
-//             var parsed = JSON.parse(quoted);
-//             var g_string = "";
-
-//             for (let i = 0; i < parsed.length; i++){
-//                 g_string += parsed[i].genre_title;
-//                 if(i < parsed.length-1){
-//                     g_string += ', ';
-//                 }
-//             }
-
-//             const item = document.createElement('li')
-//             const h3 = document.createElement('h3');
-//             h3.appendChild(document.createTextNode(`${e.track_number}.${e.track_title}`));
-//             item.appendChild(h3);
-//             item.appendChild(document.createTextNode(`Album: ${e.album_id}. ${e.album_title}\n`));
-//             item.appendChild(document.createTextNode(`Artist: ${e.artist_id}. ${e.artist_name}\n`));
-//             item.appendChild(document.createTextNode(`Tags: ${e.tags.replace(/[\[\]']+/g,'')}\n`));   
-//             item.appendChild(document.createTextNode(`Track date created: ${e.track_date_created} \nTrack date recorded: ${e.track_date_recorded} \n`));
-//             item.appendChild(document.createTextNode(`Track length: ${e.track_duration}\n`));
-//             item.appendChild(document.createTextNode(`Genres: ${g_string}\n`));         
-            
-            
-            
-            
-//             item.classList.add("box")
-//             list.appendChild(item);
-            
-//         });
-//     })        
-// }
 
 
 // to get a list of tracks by searching by album title or by album name
-function getTrackList(){
+function getTrackList(sortProperty){
     let traInput = document.getElementById("by-track");       // get input from user
     const list = document.getElementById('track-list');
     const header = document.getElementById('h-track');
@@ -221,7 +157,7 @@ function getTrackList(){
     fetch('/api/tracks')
     .then(res => res.json())
     .then(data => {
-        // compare input to fetched genres
+        // compare input to fetched tracks
         for (i = 0; i < data.length; i++) {
             // check if the input matches the inner text or text content
           value = data[i].track_title; 
@@ -232,10 +168,11 @@ function getTrackList(){
             counter++;   
           } 
         }       
+        results.sort(dynamicSort(sortProperty));
         header.append(document.createTextNode(`Top ${n} track results for:  ${traInput.value}`))
         results.forEach(e => {
             const item = document.createElement('li')
-            item.appendChild(document.createTextNode(`${e.track_id}. ${e.track_title} (${e.album_title})`));
+            item.appendChild(document.createTextNode(`${e.track_id}. ${e.track_title} [${e.track_duration}] (Album: ${e.album_title})`));
             item.classList.add("box")
             list.appendChild(item);
         });
@@ -295,8 +232,9 @@ function dynamicSort(property) {
 }
 
 function addPlaylist(){
-    
+
 }
+
 
 
 

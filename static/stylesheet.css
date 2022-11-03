@@ -35,7 +35,7 @@ h2{
     margin-block-end: 0.2em;
 }
 
-.search-bar{
+.search-bar, .new-list{
     padding: 10px;
     outline: none;
     border: 1px solid var(--light-clr);
@@ -160,3 +160,7 @@ button:hover{
     border: 3px solid var(--darkhighlight-clr);
 }
 
+.playlists{
+    width: 25%;
+    margin-top: 10px;
+}

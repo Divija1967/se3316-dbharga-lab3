@@ -1,11 +1,16 @@
 // express
 const express = require('express');
+
+const bodyParser = require('body-parser');
+
 const app = express();
 const port = 3000;
 const routerGen = express.Router();
 const routerArt = express.Router();
 const routerAlb = express.Router();
 const routerTra = express.Router();
+
+const routerList = express.Router();
 
 // to parse the csv files
 const csv = require('csv-parser');
@@ -60,6 +65,8 @@ routerGen.use(express.json())
 routerArt.use(express.json())
 routerAlb.use(express.json());
 routerTra.use(express.json());
+
+// routerList.use(express.json());
 
 
 // get list of genres 
@@ -137,10 +144,16 @@ routerTra.get('/:track_id', (req, res) =>{
         res.status(404).send(`Track ${tra_id} was not found :(`)
     }
 });
+let playlists = "hello world";
+// get list of tracks 
+routerList.get('/', (req, res, next) => {
+    res.send(playlists);
+    next();
+});
 
 
-// // to create/replace genre data given a genre id
-// router.put('/:genre_id', (req, res) =>{
+// to create/replace genre data given a genre id
+// routerGen.put('/:genre_id', (req, res) =>{
 //     const newGenre = req.body;
 //     console.log("Genre: ", newGenre);
 
@@ -162,12 +175,12 @@ routerTra.get('/:track_id', (req, res) =>{
 // // to change parts stock
 // router.post('/:id', (req, res) =>{
 //     const newPart = req.body;
-//     console.log("Part: ", newPart);
+//     console.log("Genre: ", newGenre);
 
 //     // find part
-//     const part = parts.findIndex(g => g.id === parseInt(req.params.id));
+//     const genre = genres.findIndex(g => g.id === parseInt(req.params.id));
 //     // if not found
-//     if(part < 0){
+//     if(genre < 0){
 //         res.status(404).send(`Part ${req.params.id} not found`)
 //     } else{
 //         console.log("Changing parent for ", req.params.id);
@@ -175,6 +188,21 @@ routerTra.get('/:track_id', (req, res) =>{
 //         res.send(newPart);
 //     }
 // });
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+app.post('/playlists', (req, res) => {
+    // We will be coding here
+    const playlist = req.body;
+
+    // Output the book to the console for debugging
+    console.log(playlist);
+    books.push(playlist);
+
+    res.send('Playlist is added to the database');
+});
+
 
 // install the router at api/genres
 app.use('/api/genres', routerGen);
@@ -184,6 +212,8 @@ app.use('/api/albums', routerAlb);
 app.use('/api/tracks', routerTra);
 // install the router at api/artists
 app.use('/api/artists', routerArt);
+// install the router at /api/playlists
+app.use('/api/playlists', routerList);
 
 // start app
 app.listen(port, () => {
