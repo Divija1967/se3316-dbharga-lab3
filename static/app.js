@@ -19,10 +19,10 @@ document.getElementById("sort-album-btn").addEventListener('click', function(){
 document.getElementById("sort-track-btn").addEventListener('click', function(){
     getTrackList("track_title");
 });
-// document.getElementById("sort-length-btn").addEventListener('click', function(){
-//     getTrackList("track_duration");
-// });
-document.getElementById("temp").addEventListener('click', playlistTracks)
+document.getElementById("sort-length-btn").addEventListener('click', function(){
+    getTrackList("track_duration");
+});
+// document.getElementById("temp").addEventListener('click', playlistTracks)
 
 document.getElementById('btn-create').addEventListener('click', addPlaylist);
 document.getElementById('btn-add-tracks').addEventListener('click', editPlaylist);
@@ -105,7 +105,6 @@ function trackDetails(){
     let traInput = document.getElementById("by-track-id");       // get input from user
     const list = document.getElementById('track-list');
     const header = document.getElementById('h-track');
-    let results = [];            // so the comparison is not case-sensitive 
     clear(list);
     clear(header);
     if((traInput.value === "")){
@@ -234,79 +233,171 @@ function dynamicSort(property) {
  }
 }
 
-let lists = [{id: "name", name: "love", track: {}}, {id: "sad songa", name: "wcs"}];
+let lists = [];
+
 // post to create new playlist
 function addPlaylist(){
+    let inputName = document.getElementById("new-playlist-name");
+    if(lists.some(l => l === inputName.value.toLowerCase())){
+        alert('This playlist already exists, please enter a unique name.')
+        console.log(lists)
+        }else{
       // // post to create new playlist
-
-      fetch('/api/playlists/cars', {
+      fetch(`/api/playlists/${inputName.value}`, {
         method: "POST", 
         headers:{
             "Content-type": "application/json",
         },
-        body: JSON.stringify({id: "7" , name:"cars", track1:"red", track2:"great"})
+        body: JSON.stringify({name: inputName.value, trackID: ""})
     })
     .then((res) => {
         if(res.ok){
         res.json();
         }else{
-            console.log("Unsuccessful HTTP request");
+            console.log("Unsuccessful HTTP request: Error" + res.status);
         }
             return res;
         })
-    .then(data => {console.log(data)})
-    .catch(err => console.log(err))
+    .then(data => {
+        const list = document.getElementById('playlist-names');
+        const item = document.createElement('li')
+        
+        lists.push(inputName.value)
+        item.appendChild(document.createTextNode(`${inputName.value}`));
+        item.classList.add("box");
+        item.setAttribute('id', `${inputName.value}`);
+        item.addEventListener("click", function(e){
+            // console.log(e.target.id)
+            // console.log(inputName.value)
+            viewPlaylist(e.target.id)});
+        
+        list.appendChild(item);   
 
-    // let inputName = document.getElementById("new-playlist-name");
-    // const list = document.getElementById('playlist-names');
-    // const item = document.createElement('li')
-    // if(lists.some(e => e.name.toLowerCase() === inputName.value.toLowerCase())){
-    //     alert('This playlist already exists, please enter a unique name.')
-    // }else{
-    // item.appendChild(document.createTextNode(`${inputName.value}`));
-    // item.classList.add("box");
-    // item.addEventListener("click", editPlaylist);
-    // list.appendChild(item);
-
-    // lists.push({id: '5', name: inputName.value});
-    // }
-}
-// put to add tracks to playlist
-function playlistTracks(){
-     // put fetch() to change tracks??
-     fetch('/api/playlists/help', {
-        method: "PUT", 
-        headers:{
-            "Content-type": "application/json",
-        },
-        body: JSON.stringify({id: "7" , name:"help"})
-    })
-    .then((res) => {
-        if(res.ok){
-        res.json();
-        }else{
-            console.log("Unsuccessful HTTP request");
-        }
-            return res;
         })
-    .then(data => {console.log(data)})
     .catch(err => console.log(err))
+
+    }
+    
 }
 
+// // put to add tracks to playlist
+// function playlistTracks(){
+//      // put fetch() to change tracks??
+//      fetch('/api/playlists/help', {
+//         method: "PUT", 
+//         headers:{
+//             "Content-type": "application/json",
+//         },
+//         body: JSON.stringify({id: "7" , name:"help"})
+//     })
+//     .then((res) => {
+//         if(res.ok){
+//         res.json();
+//         }else{
+//             console.log("Unsuccessful HTTP request");
+//         }
+//             return res;
+//         })
+//     .then(data => {console.log(data)})
+//     .catch(err => console.log(err))
+// }
+
+let pTracks = [];
+const trackIds = [];
+let info = [];
+// to add songs to a playlist
 function editPlaylist(){
-    let playlistName = prompt("The playlist to edit", "Playlist name");
-    fetch('/api/playlists')
-        .then(res => res.json())
-        .then(data => {
-            if(data.some(e => e.name.toLowerCase() === playlistName.toLowerCase())){
-                let playlistTracks = prompt("Enter the track ids to add to the playlist: seperated by commas");
-                let pTracks = playlistTracks.split(',');
-                console.log(pTracks);
-            }else{alert("No such playlist exists. Please try again.")}
-   
-    // remove white spaces when comparing each id
-    });
+    const div = document.createElement('div');
+    const list = document.getElementById("tracks-play");
+    const playlistName = prompt("The playlist to edit", "Playlist name");
+    if(!lists.some(e => e.toLowerCase() === playlistName.toLowerCase())){
+       alert("No such playlist exists. Please try again.")
+    }else{ let playlistTracks = prompt("Enter the track ids to add to the playlist: seperated by commas");
+        pTracks = playlistTracks.split(',');
+        pTracks.forEach(e=>{
+            fetch(`/api/tracks/${e}`)
+            .then(res => res.json())
+            .then(data => {
+                trackIds.push(`${data.track_id}`);
+                // trackTitles.push(`${data.track_title}`);
+                // tracklengths.push(`${data.track_duration}`);
+                const tracksIn = JSON.stringify(trackIds);
+//===========================================================================
+            // // post to create new playlist
+            fetch(`/api/playlists/${playlistName}`, {
+             method: "PUT", 
+                headers:{
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify({name:`${playlistName}`, trackID: `${tracksIn}`})
+            })
+            .then((res) => {
+                if(res.ok){
+                res.json();
+                }else{
+                    console.log("Unsuccessful HTTP request: Error" + res.status);
+                }
+                    return res;
+                })
+.           then(data => {
+
+                })
+// ==========================================================================
+            //info.push(`${data.track_id}. ${data.track_title} Length ${data.track_duration}, Artist: ${data.artist_id}`);
+                const item = document.createElement('li')
+                item.appendChild(document.createTextNode(`${data.track_id}. ${data.track_title} Length ${data.track_duration}, Artist: ${data.artist_id}`));
+                item.classList.add("box")
+                div.setAttribute('id', `t${playlistName}`)
+                div.classList.add('hide');
+                div.appendChild(item);
+                list.appendChild(div);
+                console.log(playlistName);
+            })        
+            .catch(err => console.log(err));   
+       })
+
+    }
+    return pTracks;
 }
+
+ 
+// to view the tracks in a playlist
+function viewPlaylist(selected){
+    
+    console.log("you are viewing a playlist, along with other information: " + selected);
+    const playlist_div = document.getElementById(`t${selected}`); // a
+    console.log("playlist selected id: " + playlist_div.id)  // 0???
+    playlist_div.classList.toggle('hide');
+    // fetch(`/api/playlists/${selected}`)
+    // .then(res => res.json())
+    // .then(data => {
+    //     var playlistTracks = JSON.parse(data.trackID);
+    //     console.log(`${data.name}. Tracks in playlist: ${playlistTracks}`);
+
+    //     playlistTracks.forEach(e => {
+    //         console.log(e);
+    //         fetch(`/api/tracks/${e}`)
+    //         .then((res) => {
+    //             if(res.ok){
+    //             res.json();
+    //             }else{
+    //                 console.log("Track does not exist");
+    //             }
+    //                 return res;
+    //             })
+    //         .then(data => {
+    //             console.log(data)
+    //         })
+    //         .catch(err => console.log(err))
+    //     }
+
+    //     );
+    // })        
+    // .catch(function(err){
+    //     console.log(err);
+    // });       
+}
+
 
 
 

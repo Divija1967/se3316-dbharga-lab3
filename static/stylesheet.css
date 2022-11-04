@@ -172,6 +172,21 @@ button:hover{
 }
 
 .playlists{
-    width: 25%;
-    margin-top: 10px;
+    width: 25%; 
+    float:left; 
+    height:100px; 
+    margin:10px;
+    margin-top: 20px;
+    margin-left: 10%;
 }
+
+.tracks-in-playlist{
+    width: 25%; 
+    float:right; 
+    height:100px; 
+    margin:10px;
+    margin-top: 20px;
+    margin-right: 10%;
+}
+
+

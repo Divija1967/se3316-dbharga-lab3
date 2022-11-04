@@ -20,7 +20,7 @@ const genres = [];
 const albums = [];
 const artists = [];
 const tracks = [];
-const playlists = [{id: "1", name: "hello"},{id: "2", name: "help"}];
+const playlists = [];
 
 // read genres csv file
 fs.createReadStream('lab3-data/genres.csv')
@@ -252,7 +252,7 @@ routerList.post('/:name', (req, res) => {
     // replace the old part with a new part
     const list = playlists.findIndex(g => g.name === newPlaylist.name);
     
-    // if genre is not found
+    // if playlist is not found, create it
     if(list < 0){
         console.log('Creating new playlist');
         playlists.push(newPlaylist);
@@ -262,6 +262,7 @@ routerList.post('/:name', (req, res) => {
     }
     res.send(newPlaylist);
 });
+
 
 
 // install the router at api/genres
