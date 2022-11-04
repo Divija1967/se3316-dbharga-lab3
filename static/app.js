@@ -19,9 +19,13 @@ document.getElementById("sort-album-btn").addEventListener('click', function(){
 document.getElementById("sort-track-btn").addEventListener('click', function(){
     getTrackList("track_title");
 });
-document.getElementById("sort-length-btn").addEventListener('click', function(){
-    getTrackList("track_duration");
-});
+// document.getElementById("sort-length-btn").addEventListener('click', function(){
+//     getTrackList("track_duration");
+// });
+document.getElementById("temp").addEventListener('click', playlistTracks)
+
+document.getElementById('btn-create').addEventListener('click', addPlaylist);
+document.getElementById('btn-add-tracks').addEventListener('click', editPlaylist);
 
 const n = 20;
 
@@ -137,10 +141,9 @@ function trackDetails(){
             list.appendChild(item);
     })        
     .catch(function(err){
-        header.append(document.createTextNode(`No results found. Please try again`))
+        header.append(document.createTextNode(`No results found. Please try again`));
     });         
 }
-
 
 // to get a list of tracks by searching by album title or by album name
 function getTrackList(sortProperty){
@@ -231,8 +234,78 @@ function dynamicSort(property) {
  }
 }
 
+let lists = [{id: "name", name: "love", track: {}}, {id: "sad songa", name: "wcs"}];
+// post to create new playlist
 function addPlaylist(){
+      // // post to create new playlist
 
+      fetch('/api/playlists/cars', {
+        method: "POST", 
+        headers:{
+            "Content-type": "application/json",
+        },
+        body: JSON.stringify({id: "7" , name:"cars", track1:"red", track2:"great"})
+    })
+    .then((res) => {
+        if(res.ok){
+        res.json();
+        }else{
+            console.log("Unsuccessful HTTP request");
+        }
+            return res;
+        })
+    .then(data => {console.log(data)})
+    .catch(err => console.log(err))
+
+    // let inputName = document.getElementById("new-playlist-name");
+    // const list = document.getElementById('playlist-names');
+    // const item = document.createElement('li')
+    // if(lists.some(e => e.name.toLowerCase() === inputName.value.toLowerCase())){
+    //     alert('This playlist already exists, please enter a unique name.')
+    // }else{
+    // item.appendChild(document.createTextNode(`${inputName.value}`));
+    // item.classList.add("box");
+    // item.addEventListener("click", editPlaylist);
+    // list.appendChild(item);
+
+    // lists.push({id: '5', name: inputName.value});
+    // }
+}
+// put to add tracks to playlist
+function playlistTracks(){
+     // put fetch() to change tracks??
+     fetch('/api/playlists/help', {
+        method: "PUT", 
+        headers:{
+            "Content-type": "application/json",
+        },
+        body: JSON.stringify({id: "7" , name:"help"})
+    })
+    .then((res) => {
+        if(res.ok){
+        res.json();
+        }else{
+            console.log("Unsuccessful HTTP request");
+        }
+            return res;
+        })
+    .then(data => {console.log(data)})
+    .catch(err => console.log(err))
+}
+
+function editPlaylist(){
+    let playlistName = prompt("The playlist to edit", "Playlist name");
+    fetch('/api/playlists')
+        .then(res => res.json())
+        .then(data => {
+            if(data.some(e => e.name.toLowerCase() === playlistName.toLowerCase())){
+                let playlistTracks = prompt("Enter the track ids to add to the playlist: seperated by commas");
+                let pTracks = playlistTracks.split(',');
+                console.log(pTracks);
+            }else{alert("No such playlist exists. Please try again.")}
+   
+    // remove white spaces when comparing each id
+    });
 }
 
 

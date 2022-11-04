@@ -20,6 +20,7 @@ const genres = [];
 const albums = [];
 const artists = [];
 const tracks = [];
+const playlists = [{id: "1", name: "hello"},{id: "2", name: "help"}];
 
 // read genres csv file
 fs.createReadStream('lab3-data/genres.csv')
@@ -93,6 +94,12 @@ routerTra.get('/', (req, res, next) => {
     next();
 });
 
+// get list of tracks 
+routerList.get('/', (req, res, next) => {
+    res.send(playlists);
+    next();
+});
+
 // get details of a given genre
 routerGen.get('/:genre_id', (req, res) =>{
     // string     
@@ -144,13 +151,56 @@ routerTra.get('/:track_id', (req, res) =>{
         res.status(404).send(`Track ${tra_id} was not found :(`)
     }
 });
-let playlists = "hello world";
-// get list of tracks 
-routerList.get('/', (req, res, next) => {
-    res.send(playlists);
-    next();
+
+// get details of a given track
+routerList.get('/:name', (req, res) =>{
+    // string     
+    const id = req.params.name;
+    // search genres array to see if type and content of parameter matches array id
+    const list = playlists.find(g => g.name === id);
+    if(list){
+        res.send(list);
+    } else{
+        res.status(404).send(`Track ${id} was not found :(`)
+    }
 });
 
+// to create/replace playlist data given a playlist
+routerList.put('/:name', (req, res) =>{
+    const newPlaylist = req.body;
+    console.log("Playlist: ", newPlaylist);
+
+    newPlaylist.name = req.params.name;
+
+    // replace the old part with a new part
+    const list = playlists.findIndex(g => g.name === newPlaylist.name);
+    // if genre is not found
+    if(list < 0){
+        console.log('Creating new playlist');
+        playlists.push(newPlaylist);
+    } else{
+        console.log("Modifying playlist ", req.params.name);
+        playlists[list] = newPlaylist;
+    }
+    res.send(newPlaylist);
+}) 
+
+// // to change playlist stuff
+// router.post('/:id', (req, res) =>{
+//     const newPart = req.body;
+//     console.log("Genre: ", newGenre);
+
+//     // find part
+//     const genre = genres.findIndex(g => g.id === parseInt(req.params.id));
+//     // if not found
+//     if(genre < 0){
+//         res.status(404).send(`Part ${req.params.id} not found`)
+//     } else{
+//         console.log("Changing parent for ", req.params.id);
+//         parts[part].stock += parseInt(req.body.stock);  // assuming stock exists
+//         res.send(newPart);
+//     }
+// });
 
 // to create/replace genre data given a genre id
 // routerGen.put('/:genre_id', (req, res) =>{
@@ -192,15 +242,25 @@ routerList.get('/', (req, res, next) => {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.post('/playlists', (req, res) => {
+routerList.post('/:name', (req, res) => {
     // We will be coding here
-    const playlist = req.body;
+    const newPlaylist = req.body;
+    console.log("Playlist: ", newPlaylist);
 
-    // Output the book to the console for debugging
-    console.log(playlist);
-    books.push(playlist);
+    newPlaylist.name = req.params.name;
 
-    res.send('Playlist is added to the database');
+    // replace the old part with a new part
+    const list = playlists.findIndex(g => g.name === newPlaylist.name);
+    
+    // if genre is not found
+    if(list < 0){
+        console.log('Creating new playlist');
+        playlists.push(newPlaylist);
+    } else{
+        console.log("Modifying playlist ", req.params.name);
+        playlists[list] = newPlaylist;
+    }
+    res.send(newPlaylist);
 });
 
 

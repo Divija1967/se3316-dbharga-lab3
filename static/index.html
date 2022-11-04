@@ -9,14 +9,17 @@
 </head>
 <body>
     <div class="top">
-        <h1>Divija's Music Store 
+        <h1>Divija's Music Store </h1>
             <div class="sort-btns">
+                <button id="all-genres">Toggle Genres</button>
                 <button class="sort-btns" id="sort-artist-btn">by artist</button>
                 <button class="sort-btns" id="sort-track-btn">by track</button>
                 <button class="sort-btns" id="sort-album-btn">by album</button>
                 <button class="sort-btns" id="sort-length-btn">by length</button>
+                
+                <button id="reset-btn">Reset</button>
             </div>
-        </h1>
+        
         <!-- buttons for sort selection -->
 
         <!-- for search bars -->
@@ -32,7 +35,7 @@
             <button 
                 class="search-btn" 
                 id="artist-btn">
-                Search Artists by ID
+                Artists by ID
             </button>
             <!-- to search for list of artists by artist name -->
             <input 
@@ -44,11 +47,8 @@
             <button 
                 class="search-btn" 
                 id="artist-name-btn">
-                Search Artists by name
+                Artists by name
             </button>
-            <!-- <input type="text" placeholder="Search by album" id="by-album" class="search-bar" maxlength="20">
-            <button class="search-btn" id="album-btn">Search Albums</button> -->
-            <!-- to search for track by album or track name -->
             <input 
                 type="text" 
                 placeholder="Search by track or album" 
@@ -58,7 +58,7 @@
             <button 
                 class="search-btn" 
                 id="track-btn">
-                Search Tracks
+                By Track or Album
             </button>
             <!-- to search for track list by track id -->
             <input 
@@ -71,20 +71,15 @@
             <button 
                 class="search-btn" 
                 id="track-id-btn">
-                Search Tracks
+                Tracks by ID
             </button>
 
-            <button id="all-genres">Toggle Genres</button>
-            <button id="reset-btn">Reset</button>
         </div>
     
     </div>
 
     <div class="playlists">
         <h2 class="playListTitle">My Playlists</h2>
-        <ul class="playList" data-lists></ul>
-
-        <form action="" data-new-list-form>
             <input 
                 type="text"
                 class="new-list"
@@ -93,11 +88,18 @@
                 aria-label="new list name"
                 id="new-playlist-name"
             />
-            <button class="btn create"
+            <button id="btn-create"
                 aria-label="create new list">+</button>
-        </form>
-    </div>
+                <ul id="playlist-names" data-lists></ul>
+                <button id="btn-add-tracks">Add tracks to a playlist</button>
 
+                <button id="temp">Temp to put</button>
+   
+    <div class="tracks-in-playlist">
+        <ul>
+        </ul>
+    </div>
+ </div>
     
 
 <div id= "all-results">
@@ -109,13 +111,13 @@
 
     <!-- to display search results for artists -->
     <div id="artist-info">
-        <h1 id="h-art"></h1>
+        <h1 id="h-art"> </h1>
         <ul  id="artist-list"></ul>
     </div>
 
      <!-- to display search results for tracks -->
      <div id="track-info">
-        <h1 id="h-track"></h1>
+        <h1 id="h-track"> </h1>
         <ol  id="track-list"></ol>
     </div>
 
