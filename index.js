@@ -1,9 +1,8 @@
-// express
-const express = require('express');
-
+const Joi = require('joi');   // for input validation
+const express = require('express');     // express
+const app = express();      
 const bodyParser = require('body-parser');
 
-const app = express();
 const port = 3000;
 const routerGen = express.Router();
 const routerArt = express.Router();
@@ -117,13 +116,19 @@ routerGen.get('/:genre_id', (req, res) =>{
 routerArt.get('/:artist_id', (req, res) =>{
     // string     
     const art_id = req.params.artist_id;
-    // search genres array to see if type and content of parameter matches array id
+    // search artists to see if type and content of parameter matches array id
     const artist = artists.find(g => g.artist_id === art_id);
+    if(isNaN(parseInt(art_id))){
+        res.status(400).send("Playlist ID must be a number")
+        return;
+    }
+
     if(artist){
         res.send(artist);
     } else{
         res.status(404).send(`Genre ${art_id} was not found :(`)
     }
+
 });
 
 // get details of a given genre
@@ -132,6 +137,10 @@ routerArt.get('/:album_id', (req, res) =>{
     const alb_id = req.params.album_id;
     // search genres array to see if type and content of parameter matches array id
     const album = albums.find(g => g.album_id === alb_id);
+    if(isNaN(parseInt(alb_id))){
+        res.status(400).send("Album ID must be a number")
+        return;
+    }
     if(album){
         res.send(album);
     } else{
@@ -143,6 +152,10 @@ routerArt.get('/:album_id', (req, res) =>{
 routerTra.get('/:track_id', (req, res) =>{
     // string     
     const tra_id = req.params.track_id;
+    if(isNaN(parseInt(tra_id))){
+        res.status(400).send("Track ID must be a number")
+        return;
+    }
     // search genres array to see if type and content of parameter matches array id
     const track = tracks.find(g => g.track_id === tra_id);
     if(track){
@@ -243,11 +256,29 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 routerList.post('/:name', (req, res) => {
+    // input validation
+    // const schema = Joi.object({
+    //     name: Joi.string().min(3).required(),
+    //     trackID: Joi.array()
+    // });
+
+    // const result = schema.validate(req.body);
+
+    // if(result.error){
+    //     // console.log(result.error)
+    //     res.status(400).send(result)
+    //     return;
+    // }
+
     // We will be coding here
     const newPlaylist = req.body;
-    console.log("Playlist: ", newPlaylist);
 
     newPlaylist.name = req.params.name;
+
+    if(!newPlaylist.name || newPlaylist.name.length > 20 || newPlaylist.name.length < 2){
+        res.status(400).send("Playlist name must be between 2 and 20 characters")
+        return;
+    }else{
 
     // replace the old part with a new part
     const list = playlists.findIndex(g => g.name === newPlaylist.name);
@@ -261,6 +292,7 @@ routerList.post('/:name', (req, res) => {
         playlists[list] = newPlaylist;
     }
     res.send(newPlaylist);
+}
 });
 
 // to delete a playlist
@@ -269,6 +301,11 @@ routerList.delete('/:name', (req, res) => {
     console.log("Playlist: ", playlistToDelete);
 
     playlistToDelete.name = req.params.name;
+
+    if(!playlistToDelete.name || playlistToDelete.name.length > 20 || playlistToDelete.name.length < 2){
+        res.status(400).send("Playlist name must be between 2 and 20 characters")
+        return;
+    }else{
 
     // replace the old part with a new part
     const list = playlists.findIndex(g => g.name === playlistToDelete.name);
@@ -280,6 +317,7 @@ routerList.delete('/:name', (req, res) => {
         playlists.pop(playlistToDelete);
     }
     res.send(playlists);
+}
 });
 
 

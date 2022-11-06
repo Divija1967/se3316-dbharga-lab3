@@ -255,12 +255,7 @@ function addPlaylist(){
     .then((res) => {
         if(res.ok){
         res.json();
-        }else{
-            console.log("Unsuccessful HTTP request: Error" + res.status);
-        }
-            return res;
-        })
-    .then(data => {
+
         const list = document.getElementById('playlist-names');
         const item = document.createElement('li')
         
@@ -272,6 +267,15 @@ function addPlaylist(){
             viewPlaylist(e.target.id)});
         
         list.appendChild(item);   
+
+        }else{
+            console.log("Unsuccessful HTTP request: Error" + res.status);
+            alert("Playlist name must be between 2 and 20 characters");
+        }
+            return res;
+        })
+    .then(data => {
+        
 
         })
     .catch(err => console.log(err))
@@ -303,11 +307,12 @@ function addPlaylist(){
 // }
 
 let pTracks = [];
-const trackIds = [];
+
 let info = [];
     var totalLength = [];
 // to add songs to a playlist
 function editPlaylist(){
+    const trackIds = [];
     const h = document.createElement('h2');
     const div = document.createElement('div');
     const list = document.getElementById("tracks-play");
@@ -328,7 +333,7 @@ function editPlaylist(){
                 const tracksIn = JSON.stringify(trackIds);
             // // post to create new playlist
             fetch(`/api/playlists/${playlistName}`, {
-             method: "POST", 
+             method: "PUT", 
                 headers:{
                     "Content-type": "application/json",
                 },
@@ -422,8 +427,8 @@ function deletePlaylist(){
                 return res;
             })
         .then(data => {
-            clear(document.getElementById(playlistName).parentElement);
-            console.log("deleted");
+            document.getElementById(playlistName).classList.remove("box");
+            clear(document.getElementById(playlistName));
             lists.pop(playlistName);
             })
         .catch(err => console.log(err))
