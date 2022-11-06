@@ -100,6 +100,22 @@ li{
     display: inline-block;
 }
 
+.playlist-header{
+    margin-top: 10px;
+    padding: 10px;
+    text-align: center;
+    color: var(--text-clr);
+    background-color: var(--darkhighlight-clr);
+    border-radius: 10px 10px 10px 10px;
+    border: var(--highlight-clr);
+    white-space: pre;
+    max-width: fit-content;
+    align-content: center;
+    margin: 20px 20px 0 0;
+    vertical-align: top;
+    display: inline-block;
+}
+
 .box:hover{
     cursor: pointer;
     background-color: var(--light-clr);
@@ -202,7 +218,7 @@ button:hover{
 }
 
 #all-results{
-    margin-top: 100px;
+    margin-top: 150px;
 }
 
 

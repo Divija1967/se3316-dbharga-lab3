@@ -175,10 +175,13 @@ function getTrackList(sortProperty){
         results.sort(dynamicSort(sortProperty));
         header.append(document.createTextNode(`Top ${n} track results for:  ${traInput.value}`))
         results.forEach(e => {
-            const item = document.createElement('li')
-            item.appendChild(document.createTextNode(`${e.track_id}. ${e.track_title} [${e.track_duration}] (Album: ${e.album_title})`));
-            item.classList.add("box")
-            list.appendChild(item);
+            console.log(e.track_id);
+            fetch(`/api/tracks/${e.track_id}`)
+            .then(res => res.json())
+            .then(data => {const item = document.createElement('li')
+                item.appendChild(document.createTextNode(`${e.track_id}. ${e.track_title} [${e.track_duration}] (Album: ${e.album_title})`));
+                item.classList.add("box")
+                list.appendChild(item);})
         });
     })        
 }
@@ -275,8 +278,6 @@ function addPlaylist(){
             return res;
         })
     .then(data => {
-        
-
         })
     .catch(err => console.log(err))
 
@@ -284,32 +285,9 @@ function addPlaylist(){
     
 }
 
-// // put to add tracks to playlist
-// function playlistTracks(){
-//      // put fetch() to change tracks??
-//      fetch('/api/playlists/help', {
-//         method: "PUT", 
-//         headers:{
-//             "Content-type": "application/json",
-//         },
-//         body: JSON.stringify({id: "7" , name:"help"})
-//     })
-//     .then((res) => {
-//         if(res.ok){
-//         res.json();
-//         }else{
-//             console.log("Unsuccessful HTTP request");
-//         }
-//             return res;
-//         })
-//     .then(data => {console.log(data)})
-//     .catch(err => console.log(err))
-// }
-
 let pTracks = [];
 
 let info = [];
-    var totalLength = [];
 // to add songs to a playlist
 function editPlaylist(){
     const trackIds = [];
@@ -317,13 +295,28 @@ function editPlaylist(){
     const div = document.createElement('div');
     const list = document.getElementById("tracks-play");
     const playlistName = prompt("The playlist to edit", "Playlist name");
-    totalLength = [];
+    if(!playlistName || playlistName > 20 || playlistName < 2){
+        alert("Playlist names are between 2 and 20 characters");
+        return;
+    }
+
+
     clear(div);
     h.appendChild(document.createTextNode("Playlist Tracks:"));
     div.appendChild(h);
     if(!lists.some(e => e.toLowerCase() === playlistName.toLowerCase())){
        alert("No such playlist exists. Please try again.")
-    }else{ let playlistTracks = prompt("Enter the track ids to add to the playlist: seperated by commas");
+       return;
+    }
+        let playlistTracks = prompt("Enter the track ids to add to the playlist: seperated by commas");
+        var alpha = /^[0-9,]*$/g;
+    
+        // if the input is too long or does not include only letter of the aplhabet, try again message
+        if(!playlistTracks.match(alpha)){
+            alert("Please only enter numbers seperated by commas");
+            return;
+        }
+
         pTracks = playlistTracks.split(',');
         pTracks.forEach(e=>{
             fetch(`/api/tracks/${e}`)
@@ -337,7 +330,7 @@ function editPlaylist(){
                 headers:{
                     "Content-type": "application/json",
                 },
-                body: JSON.stringify({name:`${playlistName}`, trackID: `${tracksIn}`, length:totalLength })
+                body: JSON.stringify({name:`${playlistName}`, trackID: `${tracksIn}`, l:pTracks.length })
             })
             .then((res) => {
                 if(res.ok){
@@ -347,63 +340,50 @@ function editPlaylist(){
                 }
                     return res;
                 })
-.           then(data => {
-
-                })
-                const item = document.createElement('li')      
-                totalLength.push(data.track_duration);
-                console.log(totalLength);
-                item.appendChild(document.createTextNode(`${data.track_id}. ${data.track_title} by Artist: ${data.artist_id} (${data.track_duration})`));
-                item.classList.add("box")
                 div.setAttribute('id', `t${playlistName}`)
                 div.classList.add('hide');
-                div.appendChild(item);
+
                 list.appendChild(div);
-                console.log(totalLength);
             })        
             .catch(err => console.log(err));   
        })
-
-    }
-    let sum = totalLength.reduce(function (previousValue, currentValue) {
-        return previousValue + currentValue;
-    });
-    console.log(sum);
 }
 
- 
 // to view the tracks in a playlist
 function viewPlaylist(selected){
+    let results = [];
     const playlist_div = document.getElementById(`t${selected}`);
     playlist_div.classList.toggle('hide');
-    // fetch(`/api/playlists/${selected}`)
-    // .then(res => res.json())
-    // .then(data => {
-    //     var playlistTracks = JSON.parse(data.trackID);
-    //     console.log(`${data.name}. Tracks in playlist: ${playlistTracks}`);
+    clear(playlist_div);
+    fetch(`/api/playlists/${selected}`)
+    .then(res => res.json())
+    .then(data => {
+        let tracksList = data.trackID.split(',');
+        tracksList.forEach(e => {  
+        var withOutBrackets=e.replace(/[\[\]']+/g,'');
+        var withoutQuotes = withOutBrackets.replace(/["']/g, "")
+        results.push(withoutQuotes);            
+        });
 
-    //     playlistTracks.forEach(e => {
-    //         console.log(e);
-    //         fetch(`/api/tracks/${e}`)
-    //         .then((res) => {
-    //             if(res.ok){
-    //             res.json();
-    //             }else{
-    //                 console.log("Track does not exist");
-    //             }
-    //                 return res;
-    //             })
-    //         .then(data => {
-    //             console.log(data)
-    //         })
-    //         .catch(err => console.log(err))
-    //     }
-
-    //     );
-    // })        
-    // .catch(function(err){
-    //     console.log(err);
-    // });       
+        results.forEach(e => {
+            fetch(`/api/tracks/${e}`)
+            .then(res => res.json())
+            .then(data => {const item = document.createElement('li')
+                item.appendChild(document.createTextNode(`${data.track_id}. ${data.track_title} [${data.track_duration}] (Album: ${data.album_title})`));
+                item.classList.add("box")
+                playlist_div.appendChild(item);})
+        });
+        // let sum = totalLength.reduce(function (previousValue, currentValue) {
+        //     return previousValue + currentValue;
+        // });
+        const item = document.createElement('li')
+        item.appendChild(document.createTextNode(`This playlist has: ${data.l} song(s)`));
+        item.classList.add("playlist-header")
+        playlist_div.appendChild(item);
+    })  
+    .catch(function(err){
+        console.log(err);
+    }); 
 }
 
 function deletePlaylist(){
@@ -435,6 +415,7 @@ function deletePlaylist(){
 
     }
 }
+
 
 
 
