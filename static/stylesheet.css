@@ -31,7 +31,7 @@ h2{
     margin-block-end: 0.2em;
 }
 
-.search-bar, .new-list{
+.search-bar{
     padding: 10px;
     outline: none;
     border: 1px solid var(--light-clr);
@@ -41,6 +41,17 @@ h2{
     margin: 5px;
 }
 
+.new-list{
+    padding: 10px;
+    outline: none;
+    border: 1px solid var(--light-clr);
+    border-radius: 15px 15px 15px 15px;
+    margin-left: 20px;
+    box-sizing: border-box;
+    margin: 5px;
+    max-width: 500px;
+}
+
 /* to hide display when necessary */
 .hide{
     display: none;
@@ -48,7 +59,7 @@ h2{
 
 #genre{
     border: 5px solid var(--darkhighlight-clr-2);
-    max-width: 500px;
+    max-width: 400px;
     margin: 0 auto 10px;
     padding: 20px;
     position: center;
@@ -177,16 +188,21 @@ button:hover{
     height:100px; 
     margin:10px;
     margin-top: 20px;
-    margin-left: 10%;
+    margin-left: 10px;
+    position: relative;
 }
 
 .tracks-in-playlist{
     width: 25%; 
-    float:right; 
+    max-width: fit-content;
+    float:left; 
     height:100px; 
-    margin:10px;
     margin-top: 20px;
     margin-right: 10%;
+}
+
+#all-results{
+    margin-top: 100px;
 }
 
 

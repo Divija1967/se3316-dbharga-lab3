@@ -165,7 +165,7 @@ routerList.get('/:name', (req, res) =>{
     }
 });
 
-// to create/replace playlist data given a playlist
+// to create/replace tracks data given a playlist
 routerList.put('/:name', (req, res) =>{
     const newPlaylist = req.body;
     console.log("Playlist: ", newPlaylist);
@@ -263,6 +263,24 @@ routerList.post('/:name', (req, res) => {
     res.send(newPlaylist);
 });
 
+// to delete a playlist
+routerList.delete('/:name', (req, res) => {
+    const playlistToDelete = req.body;
+    console.log("Playlist: ", playlistToDelete);
+
+    playlistToDelete.name = req.params.name;
+
+    // replace the old part with a new part
+    const list = playlists.findIndex(g => g.name === playlistToDelete.name);
+    // if genre is not found
+    if(list < 0){
+        console.log('Playlist does does not exist');
+    } else{
+        console.log("Deleting playlist ", req.params.name);
+        playlists.pop(playlistToDelete);
+    }
+    res.send(playlists);
+});
 
 
 // install the router at api/genres

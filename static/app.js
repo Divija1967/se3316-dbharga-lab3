@@ -25,6 +25,7 @@ document.getElementById("sort-length-btn").addEventListener('click', function(){
 // document.getElementById("temp").addEventListener('click', playlistTracks)
 
 document.getElementById('btn-create').addEventListener('click', addPlaylist);
+document.getElementById('btn-delete').addEventListener('click', deletePlaylist);
 document.getElementById('btn-add-tracks').addEventListener('click', editPlaylist);
 
 const n = 20;
@@ -57,6 +58,7 @@ function artistDetails(){
             item.appendChild(document.createTextNode(`Website: `));
             item.appendChild(a);
             item.appendChild(document.createTextNode(`Date created: ${data.artist_date_created}\n`));
+            item.appendChild(document.createTextNode(`Artist Tags: ${data.tags}\n`));
             item.classList.add("box")
             list.appendChild(item);
     })  
@@ -262,13 +264,11 @@ function addPlaylist(){
         const list = document.getElementById('playlist-names');
         const item = document.createElement('li')
         
-        lists.push(inputName.value)
+        lists.push(inputName.value);
         item.appendChild(document.createTextNode(`${inputName.value}`));
         item.classList.add("box");
         item.setAttribute('id', `${inputName.value}`);
         item.addEventListener("click", function(e){
-            // console.log(e.target.id)
-            // console.log(inputName.value)
             viewPlaylist(e.target.id)});
         
         list.appendChild(item);   
@@ -305,11 +305,17 @@ function addPlaylist(){
 let pTracks = [];
 const trackIds = [];
 let info = [];
+    var totalLength = [];
 // to add songs to a playlist
 function editPlaylist(){
+    const h = document.createElement('h2');
     const div = document.createElement('div');
     const list = document.getElementById("tracks-play");
     const playlistName = prompt("The playlist to edit", "Playlist name");
+    totalLength = [];
+    clear(div);
+    h.appendChild(document.createTextNode("Playlist Tracks:"));
+    div.appendChild(h);
     if(!lists.some(e => e.toLowerCase() === playlistName.toLowerCase())){
        alert("No such playlist exists. Please try again.")
     }else{ let playlistTracks = prompt("Enter the track ids to add to the playlist: seperated by commas");
@@ -319,17 +325,14 @@ function editPlaylist(){
             .then(res => res.json())
             .then(data => {
                 trackIds.push(`${data.track_id}`);
-                // trackTitles.push(`${data.track_title}`);
-                // tracklengths.push(`${data.track_duration}`);
                 const tracksIn = JSON.stringify(trackIds);
-//===========================================================================
             // // post to create new playlist
             fetch(`/api/playlists/${playlistName}`, {
-             method: "PUT", 
+             method: "POST", 
                 headers:{
                     "Content-type": "application/json",
                 },
-                body: JSON.stringify({name:`${playlistName}`, trackID: `${tracksIn}`})
+                body: JSON.stringify({name:`${playlistName}`, trackID: `${tracksIn}`, length:totalLength })
             })
             .then((res) => {
                 if(res.ok){
@@ -342,31 +345,31 @@ function editPlaylist(){
 .           then(data => {
 
                 })
-// ==========================================================================
-            //info.push(`${data.track_id}. ${data.track_title} Length ${data.track_duration}, Artist: ${data.artist_id}`);
-                const item = document.createElement('li')
-                item.appendChild(document.createTextNode(`${data.track_id}. ${data.track_title} Length ${data.track_duration}, Artist: ${data.artist_id}`));
+                const item = document.createElement('li')      
+                totalLength.push(data.track_duration);
+                console.log(totalLength);
+                item.appendChild(document.createTextNode(`${data.track_id}. ${data.track_title} by Artist: ${data.artist_id} (${data.track_duration})`));
                 item.classList.add("box")
                 div.setAttribute('id', `t${playlistName}`)
                 div.classList.add('hide');
                 div.appendChild(item);
                 list.appendChild(div);
-                console.log(playlistName);
+                console.log(totalLength);
             })        
             .catch(err => console.log(err));   
        })
 
     }
-    return pTracks;
+    let sum = totalLength.reduce(function (previousValue, currentValue) {
+        return previousValue + currentValue;
+    });
+    console.log(sum);
 }
 
  
 // to view the tracks in a playlist
 function viewPlaylist(selected){
-    
-    console.log("you are viewing a playlist, along with other information: " + selected);
-    const playlist_div = document.getElementById(`t${selected}`); // a
-    console.log("playlist selected id: " + playlist_div.id)  // 0???
+    const playlist_div = document.getElementById(`t${selected}`);
     playlist_div.classList.toggle('hide');
     // fetch(`/api/playlists/${selected}`)
     // .then(res => res.json())
@@ -398,6 +401,35 @@ function viewPlaylist(selected){
     // });       
 }
 
+function deletePlaylist(){
+    const playlistName = prompt("The playlist to Delete", "Playlist name");
+    if(!lists.some(e => e.toLowerCase() === playlistName.toLowerCase()) && (playlistName != "")){
+       alert("No such playlist exists. Please try again.")
+    }else{ 
+        // to delete the playlist
+        fetch(`/api/playlists/${playlistName}`, {
+            method: "DELETE", 
+            headers:{
+                "Content-type": "application/json",
+            },
+        })
+        .then((res) => {
+            if(res.ok){
+            res.json();
+            }else{
+                console.log("Unsuccessful HTTP request: Error " + res.status);
+            }
+                return res;
+            })
+        .then(data => {
+            clear(document.getElementById(playlistName).parentElement);
+            console.log("deleted");
+            lists.pop(playlistName);
+            })
+        .catch(err => console.log(err))
+
+    }
+}
 
 
 
