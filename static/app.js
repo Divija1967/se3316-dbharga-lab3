@@ -369,7 +369,7 @@ function viewPlaylist(selected){
             fetch(`/api/tracks/${e}`)
             .then(res => res.json())
             .then(data => {const item = document.createElement('li')
-                item.appendChild(document.createTextNode(`${data.track_id}. ${data.track_title} [${data.track_duration}] (Album: ${data.album_title})`));
+                item.appendChild(document.createTextNode(`${data.track_id}. ${data.track_title} [${data.track_duration}] (Album: ${data.album_title}) by :${data.artist_name}`));
                 item.classList.add("box")
                 playlist_div.appendChild(item);})
         });
